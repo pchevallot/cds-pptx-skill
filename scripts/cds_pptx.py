@@ -57,6 +57,9 @@ BANDEAU_URLS = {
     "bleu_h": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-bleu-horizontal.png",
     "blanc_h": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-blanc-horizontal.png",
     "jaune_h": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-jaune-horizontal.png",
+    "bleu_v": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-bleu-vertical.png",
+    "blanc_v": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-blanc-vertical.png",
+    "jaune_v": f"{GITHUB_BASE}/bandeaux/Bandeau-motifs-jaune-vertical.png",
 }
 
 # ---------------------------------------------------------------------------

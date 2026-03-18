@@ -98,6 +98,8 @@ Motifs decoratifs repetant le monogramme CdS. Utilisables comme :
 
 Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, vertical).
 
+> **Note sur les noms de fichiers** : les fichiers verticaux utilisent l'orthographe corrigee `vertical` (et non `vertcial`).
+
 ### Regles de placement du logo
 
 #### Slide de couverture
@@ -160,8 +162,9 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 1. **Pas de ligne d'accent sous les titres** — signature typique des slides IA
 2. **Pas de fond degrade** — rester sur aplats de couleur
 3. **Pas de texte or sur fond blanc** pour des paragraphes longs (contraste insuffisant)
-4. **Pas de slides tout-texte** — toujours un element visuel (tableau, graphique, icone, logo)
-5. **Pas de polices multiples** — tout en Open Sans
-6. **Pas de couleurs hors palette** sauf graphiques de donnees
-7. **Pas de logo deforme** — toujours respecter le ratio d'origine
-8. **Pas de monogramme a la place du logo complet** sur les presentations (sauf contrainte d'espace)
+4. **Pas de polices multiples** — tout en Open Sans
+5. **Pas de couleurs hors palette** sauf graphiques de donnees
+6. **Pas de logo deforme** — toujours respecter le ratio d'origine
+7. **Pas de monogramme a la place du logo complet** sur les presentations (sauf contrainte d'espace)
+
+> **Note** : les slides avec uniquement du texte (listes a puces, listes numerotees, paragraphes) sont tout a fait acceptables. Elles doivent toujours comporter la barre de titre bleue et le logo CdS en haut a droite.
