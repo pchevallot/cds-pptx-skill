@@ -132,9 +132,20 @@ class CdsPptxBuilder:
 
     def _detect_font(self) -> str:
         """Return the best available font name."""
-        # python-pptx embeds the font name as-is; the system rendering
-        # the PPTX will need the font installed. We default to Open Sans.
         return FONT_NAME
+
+    def _cover_title_size(self, title: str):
+        """Return adaptive font size for cover/closing/section titles."""
+        n = len(title)
+        if n <= 30:
+            return Pt(48)
+        elif n <= 50:
+            return Pt(40)
+        elif n <= 80:
+            return Pt(34)
+        elif n <= 120:
+            return Pt(28)
+        return Pt(24)
 
     # ------------------------------------------------------------------
     # Public API
@@ -143,6 +154,9 @@ class CdsPptxBuilder:
     def add_cover(self, title: str, subtitle: str = "", date_str: str = ""):
         """
         Add a cover slide with blue background, centered logo, title and subtitle.
+
+        The title font size adapts automatically to the text length so that
+        long titles never overlap the subtitle or date.
 
         Args:
             title: Main title (e.g. "Bilan COPIL")
@@ -155,24 +169,26 @@ class CdsPptxBuilder:
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = CDS_BLEU
 
-        # Logo (light version, centered)
-        self._add_centered_logo(slide, "jaune_blanc", height=Inches(1.2), top=Inches(0.8))
+        # Logo (light version, centered — slightly smaller to leave room)
+        self._add_centered_logo(slide, "jaune_blanc", height=Inches(1.0), top=Inches(0.5))
 
-        # Title
+        # Title — adaptive font size, vertically centered in a generous area
+        font_size = self._cover_title_size(title)
         self._add_textbox(
             slide,
             text=title,
-            x=Inches(1), y=Inches(3), w=Inches(11.333), h=Inches(1.5),
-            font_size=Pt(48), bold=True, color=CDS_BLANC, align=PP_ALIGN.CENTER,
+            x=Inches(1), y=Inches(1.9), w=Inches(11.333), h=Inches(2.8),
+            font_size=font_size, bold=True, color=CDS_BLANC,
+            align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE,
         )
 
-        # Subtitle
+        # Subtitle — positioned below the title area
         if subtitle:
             self._add_textbox(
                 slide,
                 text=subtitle,
-                x=Inches(1), y=Inches(4.5), w=Inches(11.333), h=Inches(1),
-                font_size=Pt(24), color=CDS_OR, align=PP_ALIGN.CENTER,
+                x=Inches(1), y=Inches(4.8), w=Inches(11.333), h=Inches(0.6),
+                font_size=Pt(22), color=CDS_OR, align=PP_ALIGN.CENTER,
             )
 
         # Date
@@ -182,8 +198,8 @@ class CdsPptxBuilder:
         self._add_textbox(
             slide,
             text=date_str,
-            x=Inches(1), y=Inches(5.5), w=Inches(11.333), h=Inches(0.5),
-            font_size=Pt(18), color=CDS_BLANC, align=PP_ALIGN.CENTER,
+            x=Inches(1), y=Inches(5.4), w=Inches(11.333), h=Inches(0.4),
+            font_size=Pt(16), color=CDS_BLANC, align=PP_ALIGN.CENTER,
         )
 
         # Decorative pattern strip at bottom
@@ -418,24 +434,196 @@ class CdsPptxBuilder:
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = CDS_BLEU
 
+        font_size = self._cover_title_size(title)
         self._add_textbox(
             slide,
             text=title,
-            x=Inches(1), y=Inches(2.5), w=Inches(11.333), h=Inches(1.5),
-            font_size=Pt(40), bold=True, color=CDS_BLANC, align=PP_ALIGN.CENTER,
+            x=Inches(1), y=Inches(2.0), w=Inches(11.333), h=Inches(2.5),
+            font_size=font_size, bold=True, color=CDS_BLANC,
+            align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE,
         )
 
         if subtitle:
             self._add_textbox(
                 slide,
                 text=subtitle,
-                x=Inches(1), y=Inches(4.2), w=Inches(11.333), h=Inches(1),
+                x=Inches(1), y=Inches(4.7), w=Inches(11.333), h=Inches(1),
                 font_size=Pt(20), color=CDS_OR, align=PP_ALIGN.CENTER,
+            )
+
+    def add_blocks_slide(self, title: str, blocks: list[dict]):
+        """
+        Add a slide with stacked content blocks, each with a colored vertical
+        accent bar on the left — ideal for layered architectures, process steps,
+        or categorized information.
+
+        Args:
+            title: Slide title (in the blue bar)
+            blocks: List of dicts with keys:
+                - "title": Block heading (displayed uppercase)
+                - "content": Description text
+                - "color": Optional hex color string (e.g. "#4CAF50").
+                  Defaults cycle through CdS palette.
+        """
+        slide = self._blank_slide()
+        self._add_title_bar(slide, title)
+        self._add_content_logo(slide)
+
+        palette = [CDS_BLEU, CDS_OR, VERT, ORANGE, ROUGE]
+        n = len(blocks)
+        if n == 0:
+            return
+
+        area_top = Inches(1.6)
+        area_height = Inches(5.4)
+        block_height = area_height // n
+        gap = Inches(0.15)
+
+        for i, block in enumerate(blocks):
+            # Determine bar color
+            color_val = block.get("color")
+            if color_val and isinstance(color_val, str):
+                h = color_val.lstrip("#")
+                bar_color = RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
+            else:
+                bar_color = palette[i % len(palette)]
+
+            block_top = area_top + block_height * i
+
+            # Vertical accent bar
+            bar_shape = slide.shapes.add_shape(
+                1,  # MSO_SHAPE.RECTANGLE
+                Inches(0.7), block_top + gap,
+                Inches(0.07), block_height - gap * 2,
+            )
+            bar_shape.fill.solid()
+            bar_shape.fill.fore_color.rgb = bar_color
+            bar_shape.line.fill.background()
+
+            # Block title
+            self._add_textbox(
+                slide,
+                text=block.get("title", "").upper(),
+                x=Inches(1.0), y=block_top + gap,
+                w=Inches(11), h=Inches(0.45),
+                font_size=Pt(17), bold=True, color=bar_color,
+            )
+
+            # Block content
+            content = block.get("content", "")
+            if content:
+                self._add_textbox(
+                    slide,
+                    text=content,
+                    x=Inches(1.0), y=block_top + gap + Inches(0.5),
+                    w=Inches(11), h=block_height - gap * 2 - Inches(0.55),
+                    font_size=Pt(14), color=CDS_GRIS_FONCE,
+                    valign=MSO_ANCHOR.TOP,
+                )
+
+    def add_cards_slide(
+        self,
+        title: str,
+        cards: list[dict],
+        footnote: str = "",
+    ):
+        """
+        Add a slide with side-by-side cards (2-4), each with a colored top
+        accent bar, a bold title, and description text — ideal for comparing
+        concepts, pillars, or key facts.
+
+        Args:
+            title: Slide title (in the blue bar)
+            cards: List of dicts (2-4 recommended) with keys:
+                - "title": Card heading
+                - "content": Card body text
+                - "color": Optional hex color for the top bar
+            footnote: Optional small text at the bottom of the slide
+        """
+        slide = self._blank_slide()
+        self._add_title_bar(slide, title)
+        self._add_content_logo(slide)
+
+        palette = [CDS_OR, CDS_BLEU, VERT, ORANGE, ROUGE]
+        n = len(cards)
+        if n == 0:
+            return
+
+        margin_x = Inches(0.5)
+        card_gap = Inches(0.3)
+        total_width = SLIDE_WIDTH - margin_x * 2
+        card_width = (total_width - card_gap * (n - 1)) // n
+        card_top = Inches(1.6)
+        card_height = Inches(4.6)
+        bar_h = Inches(0.07)
+
+        for i, card in enumerate(cards):
+            card_left = margin_x + (card_width + card_gap) * i
+
+            # Card background (light gray rounded rectangle)
+            card_shape = slide.shapes.add_shape(
+                5,  # MSO_SHAPE.ROUNDED_RECTANGLE
+                card_left, card_top, card_width, card_height,
+            )
+            card_shape.fill.solid()
+            card_shape.fill.fore_color.rgb = CDS_GRIS_CLAIR
+            card_shape.line.color.rgb = RGBColor(0xDD, 0xDD, 0xDD)
+            card_shape.line.width = Pt(1)
+
+            # Top accent bar
+            color_val = card.get("color")
+            if color_val and isinstance(color_val, str):
+                h = color_val.lstrip("#")
+                bar_color = RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
+            else:
+                bar_color = palette[i % len(palette)]
+
+            bar = slide.shapes.add_shape(
+                1,  # MSO_SHAPE.RECTANGLE
+                card_left, card_top, card_width, bar_h,
+            )
+            bar.fill.solid()
+            bar.fill.fore_color.rgb = bar_color
+            bar.line.fill.background()
+
+            # Card title
+            self._add_textbox(
+                slide,
+                text=card.get("title", ""),
+                x=card_left + Inches(0.25), y=card_top + Inches(0.4),
+                w=card_width - Inches(0.5), h=Inches(0.5),
+                font_size=Pt(16), bold=True, color=CDS_BLEU,
+                align=PP_ALIGN.CENTER,
+            )
+
+            # Card content
+            content = card.get("content", "")
+            if content:
+                self._add_textbox(
+                    slide,
+                    text=content,
+                    x=card_left + Inches(0.25), y=card_top + Inches(1.0),
+                    w=card_width - Inches(0.5), h=card_height - Inches(1.3),
+                    font_size=Pt(12), color=CDS_GRIS_FONCE,
+                    align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.TOP,
+                )
+
+        # Footnote
+        if footnote:
+            self._add_textbox(
+                slide,
+                text=footnote,
+                x=Inches(0.5), y=Inches(6.7), w=Inches(12.333), h=Inches(0.4),
+                font_size=Pt(10), italic=True,
+                color=RGBColor(0x99, 0x99, 0x99),
             )
 
     def add_closing_slide(self, text: str = "Merci de votre attention", contact: str = ""):
         """
         Add a closing slide with blue background.
+
+        The text font size adapts automatically to avoid overlapping the contact
+        information or the decorative bandeau.
 
         Args:
             text: Main closing message
@@ -445,20 +633,23 @@ class CdsPptxBuilder:
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = CDS_BLEU
 
-        self._add_centered_logo(slide, "jaune_blanc", height=Inches(1.0), top=Inches(1.0))
+        self._add_centered_logo(slide, "jaune_blanc", height=Inches(1.0), top=Inches(0.5))
 
+        # Closing text — adaptive font size
+        font_size = self._cover_title_size(text)
         self._add_textbox(
             slide,
             text=text,
-            x=Inches(1), y=Inches(3), w=Inches(11.333), h=Inches(1.5),
-            font_size=Pt(36), bold=True, color=CDS_BLANC, align=PP_ALIGN.CENTER,
+            x=Inches(1), y=Inches(1.9), w=Inches(11.333), h=Inches(2.2),
+            font_size=font_size, bold=True, color=CDS_BLANC,
+            align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE,
         )
 
         if contact:
             self._add_textbox(
                 slide,
                 text=contact,
-                x=Inches(1), y=Inches(4.5), w=Inches(11.333), h=Inches(1.5),
+                x=Inches(1), y=Inches(4.2), w=Inches(11.333), h=Inches(1.5),
                 font_size=Pt(16), color=CDS_OR, align=PP_ALIGN.CENTER,
             )
 
@@ -642,10 +833,14 @@ def main():
     """Generate a demo presentation showcasing the CdS brand."""
     builder = CdsPptxBuilder()
 
-    # Slide 1: Cover
+    # Slide 1: Cover (long title to test adaptive sizing)
     builder.add_cover(
-        title="Bilan COPIL",
-        subtitle="Metropole du Lac Bleu — Strategie IA",
+        title=(
+            "Resilience des reseaux de telecommunication "
+            "et datacenters a haute performance environnementale"
+        ),
+        subtitle="Enjeux, architectures et trajectoire pour les collectivites territoriales",
+        date_str="Mars 2026",
     )
 
     # Slide 2: Section divider
@@ -654,7 +849,63 @@ def main():
         subtitle="Accompagnement a la transformation numerique",
     )
 
-    # Slide 3: Content
+    # Slide 3: Cards (side-by-side comparison)
+    builder.add_cards_slide(
+        title="Contexte — Un ecosysteme sous tension",
+        cards=[
+            {
+                "title": "Risques climatiques",
+                "content": (
+                    "Tempetes, canicules, inondations : "
+                    "les infrastructures telecom subissent des stress croissants.\n\n"
+                    "+40% d'incidents climatiques sur les reseaux depuis 2018 "
+                    "(source : ARCEP, 2024)."
+                ),
+            },
+            {
+                "title": "Dependance numerique",
+                "content": (
+                    "93% des services publics territoriaux dependent "
+                    "d'une connectivite reseau.\n\n"
+                    "Une coupure de 4h = paralysie administrative "
+                    "et rupture de service public."
+                ),
+            },
+            {
+                "title": "Empreinte carbone",
+                "content": (
+                    "Les datacenters representent 2,5% de la consommation "
+                    "electrique nationale.\n\n"
+                    "Objectif DNUM / ARCEP : -25% d'empreinte carbone "
+                    "du numerique d'ici 2030."
+                ),
+            },
+        ],
+        footnote="Sources : ARCEP, Rapport sur l'etat d'internet en France 2024 — DNUM, Feuille de route numerique responsable 2025",
+    )
+
+    # Slide 4: Blocks (layered architecture)
+    builder.add_blocks_slide(
+        title="Architecture tri-couche resiliente",
+        blocks=[
+            {
+                "title": "Couche Infrastructure",
+                "content": "Fibre multi-operateur · LoRaWAN mutualise · Points de mutualisation · Energie secourue 72h+",
+            },
+            {
+                "title": "Couche Services & Donnees",
+                "content": "Datacenter HQE local/regional · Cloud souverain (SecNumCloud) · Replication geo-distribuee · Chiffrement bout en bout",
+                "color": "#FDC948",
+            },
+            {
+                "title": "Couche Usages & Gouvernance",
+                "content": "PCA/PRA territorial · SOC mutualise · Supervision unifiee · Charte numerique responsable",
+                "color": "#4CAF50",
+            },
+        ],
+    )
+
+    # Slide 5: Content (simple text)
     builder.add_content_slide(
         title="Contexte et enjeux",
         content=(
@@ -668,7 +919,7 @@ def main():
         ),
     )
 
-    # Slide 4: Bullet points
+    # Slide 6: Bullet points
     builder.add_bullet_slide(
         title="Prochaines etapes",
         bullets=[
@@ -680,7 +931,7 @@ def main():
         ],
     )
 
-    # Slide 5: Table
+    # Slide 7: Table
     builder.add_table_slide(
         title="Avancement par etape",
         headers=["Etape", "Intitule", "Statut", "Completion"],
@@ -693,13 +944,14 @@ def main():
         ],
     )
 
-    # Slide 6: Closing
+    # Slide 8: Closing (long text to test adaptive sizing)
     builder.add_closing_slide(
-        text="Merci de votre attention",
+        text="Construisons ensemble une infrastructure numerique resiliente et responsable",
         contact=(
             "Pascal CHEVALLOT — Directeur de mission\n"
             "pchevallot@comptoirdessignaux.com — 06 02 03 40 13\n"
-            "Le Comptoir des Signaux — comptoirdessignaux.com"
+            "Le Comptoir des Signaux — comptoirdessignaux.com\n"
+            "Architecte de trajectoire numerique publique integree"
         ),
     )
 

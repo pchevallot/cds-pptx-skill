@@ -130,8 +130,10 @@ Les logos sont heberges sur GitHub. Utiliser les URLs `raw.githubusercontent.com
 Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une classe `CdsPptxBuilder` avec des methodes reutilisables :
 
 - `add_cover(title, subtitle)` — slide de couverture (fond bleu, logo clair centre)
-- `add_content_slide(title, content)` — slide texte avec barre titre + logo
+- `add_content_slide(title, content)` — slide texte simple avec barre titre + logo
 - `add_bullet_slide(title, bullets)` — slide avec liste a puces
+- `add_blocks_slide(title, blocks)` — **blocs empiles avec barres verticales colorees** (architectures, couches, processus)
+- `add_cards_slide(title, cards, footnote)` — **cartes cote a cote** avec barre d'accent coloree (comparatifs, piliers, faits cles)
 - `add_table_slide(title, headers, rows)` — slide avec tableau formate
 - `add_chart_slide(title, image_path)` — slide avec graphique (image PNG/JPG)
 - `add_radar_slide(title, labels, datasets, chart_title)` — slide avec diagramme radar matplotlib (ratio carre garanti)
@@ -174,6 +176,68 @@ builder.save("ma_presentation.pptx")
 ```
 
 Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
+
+## Design de slides — Regles de choix de methode
+
+> **IMPORTANT** : Ne jamais utiliser `add_content_slide()` pour du contenu structure.
+> Choisir la methode la plus adaptee au type de contenu :
+
+| Type de contenu | Methode a utiliser |
+|---|---|
+| Texte libre, paragraphes simples | `add_content_slide()` |
+| Liste de points | `add_bullet_slide()` |
+| Couches, categories, processus en etapes | **`add_blocks_slide()`** |
+| Comparaison cote a cote (2-4 elements) | **`add_cards_slide()`** |
+| Donnees tabulaires | `add_table_slide()` |
+| Graphique / image | `add_chart_slide()` |
+| Diagramme radar | `add_radar_slide()` |
+
+### Slides de blocs — `add_blocks_slide()`
+
+Ideale pour les architectures en couches, les processus sequentiels, ou les
+categories avec titres et descriptions. Chaque bloc a une barre verticale
+coloree a gauche (les couleurs cyclent automatiquement dans la palette CdS).
+
+```python
+builder.add_blocks_slide(
+    title="Architecture tri-couche",
+    blocks=[
+        {"title": "Infrastructure", "content": "Fibre · LoRaWAN · Energie 72h+"},
+        {"title": "Services & Donnees", "content": "Cloud souverain · Chiffrement", "color": "#FDC948"},
+        {"title": "Usages & Gouvernance", "content": "PCA/PRA · Supervision", "color": "#4CAF50"},
+    ],
+)
+```
+
+### Slides de cartes — `add_cards_slide()`
+
+Ideale pour comparer 2 a 4 concepts, piliers, ou faits cles cote a cote.
+Chaque carte a un fond gris clair, une barre d'accent coloree en haut,
+un titre en bleu et du texte descriptif.
+
+```python
+builder.add_cards_slide(
+    title="Trois enjeux majeurs",
+    cards=[
+        {"title": "Risques climatiques", "content": "+40% d'incidents depuis 2018"},
+        {"title": "Dependance numerique", "content": "93% des services publics connectes"},
+        {"title": "Empreinte carbone", "content": "Objectif -25% d'ici 2030"},
+    ],
+    footnote="Sources : ARCEP 2024, DNUM 2025",
+)
+```
+
+### Titres adaptatifs (couverture, cloture, section)
+
+Les slides de couverture, de cloture et de section ajustent automatiquement
+la taille de police du titre en fonction de sa longueur :
+- ≤ 30 caracteres : 48pt
+- ≤ 50 caracteres : 40pt
+- ≤ 80 caracteres : 34pt
+- ≤ 120 caracteres : 28pt
+- au-dela : 24pt
+
+Cela evite que les titres longs debordent sur le sous-titre ou la date.
 
 ## Diagrammes radar — Regles imperatives
 
