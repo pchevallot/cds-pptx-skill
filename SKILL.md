@@ -108,38 +108,50 @@ Les logos sont heberges sur GitHub. Utiliser les URLs `raw.githubusercontent.com
 - Bordures : fines, gris clair
 - Padding interne : suffisant pour la lisibilite
 
-## Script Python
+## Script Python — Boite a outils
 
-Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une classe `CdsPptxBuilder` qui :
+Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une classe `CdsPptxBuilder` avec des methodes reutilisables :
 
-1. Telecharge automatiquement les logos depuis GitHub (avec cache local)
-2. Applique la charte graphique CdS (couleurs, polices, mise en page)
-3. Genere un fichier `.pptx` valide
+- `add_cover(title, subtitle)` — slide de couverture (fond bleu, logo clair centre)
+- `add_content_slide(title, content)` — slide texte avec barre titre + logo
+- `add_bullet_slide(title, bullets)` — slide avec liste a puces
+- `add_table_slide(title, headers, rows)` — slide avec tableau formate
+- `add_chart_slide(title, image_path)` — slide avec graphique (image PNG/JPG)
+- `add_section_slide(title, subtitle)` — slide de separation (fond bleu)
+- `add_closing_slide(text, contact)` — slide de cloture
 
-### Utilisation
+### Comportement attendu
+
+> **IMPORTANT** : la fonction `main()` du script est un simple exemple de demonstration.
+> Ne JAMAIS generer les slides d'exemple a la place du contenu demande par l'utilisateur.
+>
+> Quand l'utilisateur demande une presentation, tu DOIS :
+> 1. Comprendre le contenu specifique qu'il souhaite presenter
+> 2. Ecrire un script Python qui utilise la classe `CdsPptxBuilder` pour creer
+>    exactement les slides correspondant a SON contenu
+> 3. Appliquer systematiquement la charte CdS (couleurs, Open Sans, logos, mise en page)
+>
+> Le script est une boite a outils, pas un generateur de demo.
+
+### Dependances
 
 ```bash
 pip install python-pptx requests
-python scripts/cds_pptx.py
 ```
 
-### Integration dans du code
+### Exemple d'integration
 
 ```python
 from cds_pptx import CdsPptxBuilder
 
 builder = CdsPptxBuilder()
 
-# Slide de couverture
-builder.add_cover("Titre principal", "Sous-titre ou nom du client")
+# Adapter les slides au contenu reel de l'utilisateur
+builder.add_cover("Titre de la presentation", "Sous-titre ou client")
+builder.add_bullet_slide("Points cles", ["Premier point", "Deuxieme point"])
+builder.add_table_slide("Resultats", ["Indicateur", "Valeur"], [["Taux", "85%"]])
+builder.add_closing_slide("Merci", "contact@comptoirdessignaux.com")
 
-# Slide de contenu avec titre
-builder.add_content_slide("Mon titre", "Texte du contenu...")
-
-# Slide avec tableau
-builder.add_table_slide("Titre", headers=["Col1", "Col2"], rows=[["a", "b"], ["c", "d"]])
-
-# Sauvegarder
 builder.save("ma_presentation.pptx")
 ```
 
