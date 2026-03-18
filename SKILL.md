@@ -5,7 +5,16 @@ description: "Use this skill when creating PowerPoint presentations (.pptx) for 
 
 # CdS PPTX — Charte graphique Comptoir des Signaux
 
-Ce skill fournit tout le necessaire pour creer des presentations PowerPoint respectant la charte graphique du Comptoir des Signaux.
+Ce skill fournit tout le nécessaire pour créer des présentations PowerPoint respectant la charte graphique du Comptoir des Signaux.
+
+> **LANGUE** : Tout le contenu des présentations DOIT être rédigé en français correct
+> avec les accents (é, è, ê, à, ù, ç, etc.). Ne JAMAIS omettre les accents.
+> Exemples : « Résilience », « stratégie », « collectivités territoriales », « télécommunication ».
+
+> **LOGOS** : Si le téléchargement depuis GitHub échoue (sandbox sans accès réseau),
+> utiliser les logos embarqués en base64 dans `scripts/logos_b64.py`.
+> Importer `LOGO_BLEU_JAUNE_B64` (fond clair) ou `LOGO_JAUNE_BLANC_B64` (fond bleu),
+> décoder avec `base64.b64decode()` et écrire dans un fichier temporaire avant insertion.
 
 ## Palette de couleurs
 
