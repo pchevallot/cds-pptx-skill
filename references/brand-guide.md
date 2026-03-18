@@ -109,12 +109,13 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 - Hauteur : 1.2" (largeur automatique ~4.8" selon ratio 4:1)
 
 #### Slides de contenu
-- Logo **Bleu-Jaune** (pour fond blanc)
-- En haut a droite
+- Logo **Jaune-Blanc** (visible sur la barre titre bleue)
+- En haut a droite, dans la barre titre bleue
 - Hauteur : 0.5" (largeur ~2.0")
 - Marge droite : 0.2" du bord
 - Position verticale : 0.25" du haut
 - Ne doit pas chevaucher le texte du titre
+- **Note** : ne jamais utiliser Bleu-Jaune dans la barre bleue (le texte bleu est invisible sur fond bleu)
 
 ## Mise en page des slides
 

@@ -182,9 +182,12 @@ class CdsPptxBuilder:
         self._add_textbox(
             slide,
             text=date_str,
-            x=Inches(1), y=Inches(6), w=Inches(11.333), h=Inches(0.5),
+            x=Inches(1), y=Inches(5.5), w=Inches(11.333), h=Inches(0.5),
             font_size=Pt(18), color=CDS_BLANC, align=PP_ALIGN.CENTER,
         )
+
+        # Decorative pattern strip at bottom
+        self._add_bandeau(slide, variant="jaune_h")
 
     def add_content_slide(self, title: str, content: str):
         """
@@ -317,29 +320,7 @@ class CdsPptxBuilder:
 
         chart_path = Path(chart_image_path)
         if chart_path.exists():
-            # Fit image within available space
-            max_w = Inches(11.333)
-            max_h = Inches(5.5)
-            top = Inches(1.5)
-
-            try:
-                from PIL import Image
-                with Image.open(chart_path) as img:
-                    ratio = img.width / img.height
-            except ImportError:
-                ratio = 16 / 9  # Default assumption
-
-            if ratio >= max_w / max_h:
-                w = max_w
-                h = w / ratio
-            else:
-                h = max_h
-                w = h * ratio
-
-            left = (SLIDE_WIDTH - int(w)) // 2
-            slide.shapes.add_picture(
-                str(chart_path), left, top, width=int(w), height=int(h)
-            )
+            self._insert_chart_image(slide, chart_path)
         else:
             self._add_textbox(
                 slide,
@@ -348,6 +329,82 @@ class CdsPptxBuilder:
                 font_size=Pt(18), italic=True, color=CDS_GRIS_FONCE,
                 align=PP_ALIGN.CENTER,
             )
+
+    def add_radar_slide(
+        self,
+        title: str,
+        labels: list[str],
+        datasets: list[dict],
+        chart_title: str = "",
+    ):
+        """
+        Generate a radar chart with matplotlib and add it to the presentation.
+
+        Uses CdS brand colors, square aspect ratio, and proper label placement.
+
+        Args:
+            title: Slide title (in the blue bar)
+            labels: Axis labels (e.g. ["Axe 1", "Axe 2", ...])
+            datasets: List of dicts with keys:
+                - "label": Legend label
+                - "values": List of numeric values (same length as labels)
+                - "color": Optional hex color (default: CdS palette)
+            chart_title: Optional chart title rendered inside the image
+        """
+        import math
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        n = len(labels)
+        angles = [i / n * 2 * math.pi for i in range(n)]
+        angles += angles[:1]  # Close the polygon
+
+        # CdS brand colors for datasets
+        palette = ["#1F519B", "#D4AF37", "#F44336", "#4CAF50", "#FF9800"]
+
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+
+        for i, ds in enumerate(datasets):
+            values = ds["values"] + ds["values"][:1]
+            color = ds.get("color", palette[i % len(palette)])
+            ax.plot(angles, values, "o-", linewidth=2, label=ds["label"], color=color)
+            ax.fill(angles, values, alpha=0.15, color=color)
+
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(labels, fontsize=11, fontfamily="sans-serif")
+
+        # Ensure the radar is perfectly circular
+        ax.set_aspect("equal")
+
+        if chart_title:
+            ax.set_title(
+                chart_title, fontsize=16, fontweight="bold",
+                color="#1F519B", pad=20, fontfamily="sans-serif",
+            )
+
+        ax.legend(
+            loc="lower right", bbox_to_anchor=(1.15, -0.05),
+            fontsize=10, framealpha=0.9,
+        )
+
+        # Save to temp file
+        tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+        fig.savefig(tmp.name, dpi=150, bbox_inches="tight", facecolor="white")
+        plt.close(fig)
+
+        # Add as chart slide
+        slide = self._blank_slide()
+        self._add_title_bar(slide, title)
+        self._add_content_logo(slide)
+        self._insert_chart_image(slide, Path(tmp.name))
+
+        # Cleanup
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
 
     def add_section_slide(self, title: str, subtitle: str = ""):
         """
@@ -401,9 +458,12 @@ class CdsPptxBuilder:
             self._add_textbox(
                 slide,
                 text=contact,
-                x=Inches(1), y=Inches(5), w=Inches(11.333), h=Inches(1.5),
+                x=Inches(1), y=Inches(4.5), w=Inches(11.333), h=Inches(1.5),
                 font_size=Pt(16), color=CDS_OR, align=PP_ALIGN.CENTER,
             )
+
+        # Decorative pattern strip at bottom
+        self._add_bandeau(slide, variant="jaune_h")
 
     def save(self, path: str | Path) -> Path:
         """Save the presentation to a file."""
@@ -447,9 +507,10 @@ class CdsPptxBuilder:
         p.alignment = PP_ALIGN.CENTER
 
     def _add_content_logo(self, slide):
-        """Add the standard logo to the top-right corner of a content slide."""
+        """Add the light logo to the top-right corner of a content slide (blue title bar)."""
         try:
-            logo_path = self.cache.get(LOGO_URLS["bleu_jaune"])
+            # Jaune-Blanc variant: yellow monogram + white text — visible on blue bar
+            logo_path = self.cache.get(LOGO_URLS["jaune_blanc"])
             logo_h = Inches(0.5)
             logo_w = Inches(2.0)  # ~4:1 ratio
             left = SLIDE_WIDTH - logo_w - Inches(0.2)
@@ -467,6 +528,77 @@ class CdsPptxBuilder:
             logo_w = Inches(height / Inches(1) * 4)  # 4:1 ratio
             left = (SLIDE_WIDTH - logo_w) // 2
             slide.shapes.add_picture(str(logo_path), int(left), top, height=logo_h)
+        except Exception:
+            pass  # Graceful degradation
+
+    def _insert_chart_image(self, slide, chart_path: Path):
+        """Insert a chart image centered in the content area, preserving aspect ratio."""
+        max_w = Inches(11.333)
+        max_h = Inches(5.5)
+        top = Inches(1.5)
+
+        try:
+            from PIL import Image as PILImage
+            with PILImage.open(chart_path) as img:
+                ratio = img.width / img.height
+        except ImportError:
+            ratio = 1.0  # Default to square (safe for radar charts)
+
+        if ratio >= max_w / max_h:
+            w = int(max_w)
+            h = int(w / ratio)
+        else:
+            h = int(max_h)
+            w = int(h * ratio)
+
+        # Center horizontally, vertically center in content area
+        left = (int(SLIDE_WIDTH) - w) // 2
+        v_offset = (int(max_h) - h) // 2
+        top = int(Inches(1.5)) + v_offset
+
+        slide.shapes.add_picture(str(chart_path), left, top, width=w, height=h)
+
+    def _add_bandeau(self, slide, variant="jaune_h", max_height_inches=1.2):
+        """
+        Add a decorative pattern strip at the bottom of a slide.
+
+        The bandeau image is scaled to the full slide width while preserving
+        its natural aspect ratio so the monogram patterns stay circular.
+
+        Args:
+            slide: The slide to add the bandeau to
+            variant: Key from BANDEAU_URLS (default: yellow horizontal)
+            max_height_inches: Maximum height cap in inches
+        """
+        try:
+            url = BANDEAU_URLS.get(variant, BANDEAU_URLS["jaune_h"])
+            bandeau_path = self.cache.get(url)
+
+            # Get actual image dimensions to preserve aspect ratio
+            try:
+                from PIL import Image as PILImage
+                with PILImage.open(bandeau_path) as img:
+                    img_ratio = img.width / img.height
+            except ImportError:
+                img_ratio = 12.0  # Reasonable fallback for horizontal bandeau
+
+            # Scale to full slide width, calculate height from ratio
+            bandeau_w = int(SLIDE_WIDTH)
+            bandeau_h = int(SLIDE_WIDTH / img_ratio)
+
+            # Cap height so it doesn't take too much slide space
+            max_h = Inches(max_height_inches)
+            if bandeau_h > int(max_h):
+                bandeau_h = int(max_h)
+                bandeau_w = int(bandeau_h * img_ratio)
+
+            left = (int(SLIDE_WIDTH) - bandeau_w) // 2
+            top = int(SLIDE_HEIGHT) - bandeau_h
+
+            slide.shapes.add_picture(
+                str(bandeau_path), left, top,
+                width=bandeau_w, height=bandeau_h,
+            )
         except Exception:
             pass  # Graceful degradation
 

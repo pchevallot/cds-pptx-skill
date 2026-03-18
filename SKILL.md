@@ -106,9 +106,17 @@ Les logos sont heberges sur GitHub. Utiliser les URLs `raw.githubusercontent.com
 
 ### Regles de placement du logo
 
-- **Slides de contenu** : logo standard (Bleu-Jaune) en haut a droite, hauteur 0.5", marge 0.2" du bord
+- **Slides de contenu** : logo clair **Jaune-Blanc** dans la barre titre bleue, en haut a droite, hauteur 0.5", marge 0.2" du bord
 - **Slide de couverture** : logo clair (Jaune-Blanc) centre, hauteur 1.2"
 - **Ratio du logo** : ~4:1 (largeur = hauteur x 4)
+- **IMPORTANT** : sur fond bleu, toujours utiliser la variante Jaune-Blanc (jamais Bleu-Jaune dont le texte bleu serait invisible)
+
+### Bandeau de motifs
+
+- **Slides de couverture et de cloture** : bandeau jaune horizontal en bas de slide
+- **Ratio preserve** : ne JAMAIS etirer le bandeau — toujours calculer la hauteur a partir du ratio reel de l'image
+- La methode `_add_bandeau()` du script gere automatiquement le ratio
+- Hauteur max : 1.2" pour ne pas empieter sur le contenu
 
 ### Tableaux
 
@@ -126,8 +134,9 @@ Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une cla
 - `add_bullet_slide(title, bullets)` — slide avec liste a puces
 - `add_table_slide(title, headers, rows)` — slide avec tableau formate
 - `add_chart_slide(title, image_path)` — slide avec graphique (image PNG/JPG)
+- `add_radar_slide(title, labels, datasets, chart_title)` — slide avec diagramme radar matplotlib (ratio carre garanti)
 - `add_section_slide(title, subtitle)` — slide de separation (fond bleu)
-- `add_closing_slide(text, contact)` — slide de cloture
+- `add_closing_slide(text, contact)` — slide de cloture (avec bandeau decoratif)
 
 ### Comportement attendu
 
@@ -145,7 +154,7 @@ Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une cla
 ### Dependances
 
 ```bash
-pip install python-pptx requests
+pip install python-pptx requests matplotlib numpy Pillow
 ```
 
 ### Exemple d'integration
@@ -166,11 +175,46 @@ builder.save("ma_presentation.pptx")
 
 Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
 
+## Diagrammes radar — Regles imperatives
+
+> **Toujours utiliser `add_radar_slide()`** pour les diagrammes radar au lieu de generer
+> manuellement un graphique matplotlib puis l'inserer avec `add_chart_slide()`.
+>
+> La methode `add_radar_slide()` garantit :
+> - Format carre (`figsize=(8, 8)`) pour un radar non deforme
+> - `ax.set_aspect("equal")` pour un cercle parfait
+> - Couleurs CdS automatiques (Bleu, Or, Rouge, Vert, Orange)
+> - Legende positionnee hors du graphique (pas de chevauchement)
+> - DPI 150 pour une image nette
+
+### Exemple d'utilisation
+
+```python
+builder.add_radar_slide(
+    title="Comparatif des dimensions",
+    labels=["Axe 1", "Axe 2", "Axe 3", "Axe 4", "Axe 5"],
+    datasets=[
+        {"label": "Situation actuelle", "values": [3, 5, 2, 4, 6]},
+        {"label": "Cible", "values": [8, 9, 7, 8, 9], "color": "#D4AF37"},
+    ],
+    chart_title="Radar de maturite",
+)
+```
+
+### Si tu dois generer un graphique matplotlib manuellement
+
+- **Toujours** utiliser `figsize=(8, 8)` pour les radars (carre)
+- **Toujours** appeler `ax.set_aspect("equal")`
+- **Toujours** sauvegarder avec `dpi=150, bbox_inches="tight"`
+- **Toujours** placer la legende avec `bbox_to_anchor` hors de la zone du graphique
+- **Ne jamais** utiliser `figsize=(10, 6)` ou tout autre format rectangulaire pour un radar
+
 ## Checklist avant livraison
 
 - [ ] Police Open Sans utilisee partout (pas d'Arial, pas de Calibri)
 - [ ] Couleurs exclusivement issues de la palette CdS
-- [ ] Logo correct selon le fond (Bleu-Jaune sur clair, Jaune-Blanc sur bleu)
+- [ ] Logo Jaune-Blanc sur barre titre bleue et slides de couverture (jamais Bleu-Jaune sur fond bleu)
+- [ ] Bandeau de motifs non deforme sur couverture et cloture (ratio preserve)
 - [ ] Barre de titre bleue sur toutes les slides de contenu
 - [ ] Marges respectees (0.5" minimum)
 - [ ] Texte align a gauche (sauf titres centres)
