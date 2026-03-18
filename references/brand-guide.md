@@ -12,7 +12,7 @@ Le ton est **professionnel, institutionnel et accessible**. Les presentations do
 
 ```
 Bleu CdS     #1F519B    rgb(31, 81, 155)     — Confiance, institution, serieux
-Or CdS       #D4AF37    rgb(212, 175, 55)    — Excellence, mise en valeur, accent
+Or CdS       #FDC948    rgb(253, 201, 72)    — Excellence, mise en valeur, accent
 ```
 
 ### Couleurs neutres

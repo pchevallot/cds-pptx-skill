@@ -21,7 +21,7 @@ Ce skill fournit tout le nécessaire pour créer des présentations PowerPoint r
 | Nom | Hex | RGB | Usage |
 |-----|-----|-----|-------|
 | **Bleu CdS** | `#1F519B` | 31, 81, 155 | Couleur principale. Titres, barres, fonds de slides de couverture |
-| **Or CdS** | `#D4AF37` | 212, 175, 55 | Couleur secondaire. Accents, sous-titres, mise en valeur |
+| **Or CdS** | `#FDC948` | 253, 201, 72 | Couleur secondaire. Accents, sous-titres, mise en valeur |
 | **Blanc** | `#FFFFFF` | 255, 255, 255 | Texte sur fond bleu, fonds clairs |
 | **Gris fonce** | `#333333` | 51, 51, 51 | Texte courant sur fond clair |
 | **Gris clair** | `#F5F5F5` | 245, 245, 245 | Fonds secondaires, lignes alternees de tableaux |
@@ -32,7 +32,7 @@ Ce skill fournit tout le nécessaire pour créer des présentations PowerPoint r
 - **Fond de slides de contenu** : Blanc (`#FFFFFF`) avec texte gris fonce
 - **Barre de titre** : Rectangle pleine largeur en Bleu CdS, texte blanc, hauteur ~1"
 - **En-tetes de tableaux** : Fond Bleu CdS, texte blanc, gras
-- **Liens et accents** : Or CdS (`#D4AF37`)
+- **Liens et accents** : Or CdS (`#FDC948`)
 - **Ne jamais utiliser** de couleurs hors palette sauf pour des graphiques de donnees (vert validation `#4CAF50`, orange attention `#FF9800`, rouge alerte `#F44336`)
 
 ## Typographie
@@ -195,7 +195,7 @@ builder.add_radar_slide(
     labels=["Axe 1", "Axe 2", "Axe 3", "Axe 4", "Axe 5"],
     datasets=[
         {"label": "Situation actuelle", "values": [3, 5, 2, 4, 6]},
-        {"label": "Cible", "values": [8, 9, 7, 8, 9], "color": "#D4AF37"},
+        {"label": "Cible", "values": [8, 9, 7, 8, 9], "color": "#FDC948"},
     ],
     chart_title="Radar de maturite",
 )

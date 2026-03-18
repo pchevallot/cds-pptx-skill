@@ -67,7 +67,7 @@ BANDEAU_URLS = {
 # ---------------------------------------------------------------------------
 
 CDS_BLEU = RGBColor(0x1F, 0x51, 0x9B)
-CDS_OR = RGBColor(0xD4, 0xAF, 0x37)
+CDS_OR = RGBColor(0xFD, 0xC9, 0x48)
 CDS_BLANC = RGBColor(0xFF, 0xFF, 0xFF)
 CDS_GRIS_FONCE = RGBColor(0x33, 0x33, 0x33)
 CDS_GRIS_CLAIR = RGBColor(0xF5, 0xF5, 0xF5)
@@ -362,7 +362,7 @@ class CdsPptxBuilder:
         angles += angles[:1]  # Close the polygon
 
         # CdS brand colors for datasets
-        palette = ["#1F519B", "#D4AF37", "#F44336", "#4CAF50", "#FF9800"]
+        palette = ["#1F519B", "#FDC948", "#F44336", "#4CAF50", "#FF9800"]
 
         fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
 
