@@ -35,10 +35,15 @@ Rouge         #F44336    rgb(244, 67, 54)     — Alerte, critique
 
 | Combinaison | Usage | Contraste |
 |-------------|-------|-----------|
-| Blanc sur Bleu CdS | Titres, en-tetes | Excellent |
-| Gris fonce sur Blanc | Texte courant | Excellent |
-| Or CdS sur Bleu CdS | Sous-titres, accents | Bon |
-| Or CdS sur Blanc | A eviter pour du texte long | Moyen |
+| Blanc sur Bleu CdS | Titres, en-tetes | Excellent (7.2:1) |
+| Gris fonce sur Blanc | Texte courant | Excellent (12.6:1) |
+| Or CdS sur Bleu CdS | Sous-titres, accents | Bon (4.8:1) |
+| Or CdS sur Blanc | A eviter pour du texte long | Moyen (2.1:1) |
+| Blanc sur Vert | Indicateurs | Bon (4.6:1) |
+| Blanc sur Rouge | Indicateurs | Bon (4.6:1) |
+
+> **WCAG AA** : ratio minimum 4.5:1 pour le texte courant, 3:1 pour les grands titres (>= 18pt bold).
+> Le texte Or sur Blanc ne respecte pas ces seuils — ne l'utiliser que pour de courts accents decoratifs.
 
 ## Typographie
 
@@ -98,15 +103,13 @@ Motifs decoratifs repetant le monogramme CdS. Utilisables comme :
 
 Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, vertical).
 
-> **Note sur les noms de fichiers** : les fichiers verticaux utilisent l'orthographe corrigee `vertical` (et non `vertcial`).
-
 ### Regles de placement du logo
 
 #### Slide de couverture
 - Logo **Jaune-Blanc** (pour fond bleu)
 - Centre horizontalement
-- Position haute (top ~0.8")
-- Hauteur : 1.2" (largeur automatique ~4.8" selon ratio 4:1)
+- Position haute (top ~0.5")
+- Hauteur : 1.0" (largeur automatique ~4.0" selon ratio 4:1)
 
 #### Slides de contenu
 - Logo **Jaune-Blanc** (visible sur la barre titre bleue)
@@ -121,7 +124,7 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 
 ### Format
 - **Ratio** : 16:9 (widescreen)
-- **Dimensions** : 13.333" x 7.5"
+- **Dimensions** : 13.333" x 7.5" (`LAYOUT_WIDE` dans PptxGenJS)
 
 ### Zones
 
@@ -141,8 +144,7 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 
 ### Barre de titre
 - Rectangle pleine largeur (`x=0, y=0, w=13.333", h=1"`)
-- Fond : Bleu CdS (`#1F519B`)
-- Bordure : Bleu CdS (pas de bordure visible)
+- Fond : Bleu CdS (`1F519B`)
 - Texte : blanc, Open Sans Bold, 24pt, centre verticalement et horizontalement
 
 ### Zone de contenu
@@ -153,19 +155,122 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 ### Tableaux
 - **En-tetes** : fond Bleu CdS, texte blanc, Open Sans Bold 12-14pt, centre
 - **Lignes paires** : fond blanc
-- **Lignes impaires** : fond Gris clair (`#F5F5F5`)
+- **Lignes impaires** : fond Gris clair (`F5F5F5`)
 - **Bordures** : fines (0.5pt), gris clair
 - **Cellules** : Open Sans Regular 11-12pt, gris fonce
-- **Indicateurs couleur** : vert/orange/rouge pour les statuts (voir couleurs fonctionnelles)
+
+## Ombres
+
+Les ombres ajoutent de la profondeur aux cards, blocs et images. Parametres standards CdS :
+
+### Ombre standard (cards, blocs, images)
+
+```javascript
+// PptxGenJS — toujours utiliser une factory, jamais reutiliser l'objet
+const makeShadow = () => ({
+  type: "outer",
+  color: "000000",    // Noir, SANS #
+  blur: 6,            // Flou en points
+  offset: 2,          // Distance en points (TOUJOURS positif)
+  angle: 135,         // Bas-droite
+  opacity: 0.15,      // Subtile, pas ecrasante
+});
+```
+
+### Ombre vers le haut (barres de pied de page)
+
+```javascript
+const makeShadowUp = () => ({
+  type: "outer",
+  color: "000000",
+  blur: 4,
+  offset: 2,
+  angle: 270,        // Vers le haut
+  opacity: 0.10,
+});
+```
+
+### Regles d'utilisation
+- **Ou mettre des ombres** : cards, blocs, images, cercles de timeline
+- **Ou ne PAS en mettre** : barre de titre, bandeau, logo, texte
+- **Subtilite** : opacity entre 0.10 et 0.20, pas plus
+- **Coherence** : meme style d'ombre sur tous les elements similaires d'une slide
+
+### Piege PptxGenJS : mutation in-place
+PptxGenJS modifie les objets d'options en place lors du rendu.
+**Ne JAMAIS partager un objet ombre entre plusieurs appels** — utiliser une factory (`makeShadow()`).
+
+## Degrades
+
+Les degrades ne sont **pas supportes nativement** par PptxGenJS pour les formes.
+
+**Solutions alternatives** :
+- Utiliser des aplats de couleur (la charte CdS privilegie les aplats)
+- Si un degrade est absolument necessaire, creer une image de fond PNG avec le degrade et l'utiliser comme `background.path`
+- Pour les graphiques matplotlib, les degrades sont possibles via les colormaps
+
+## Icones
+
+Les icones ajoutent de la clarte visuelle. Utiliser react-icons pour generer des SVG, convertis en PNG via sharp.
+
+### Tailles recommandees
+
+| Contexte | Taille affichee | Resolution de rendu |
+|----------|-----------------|---------------------|
+| Grande (hero, feature) | 0.6" x 0.6" | 256px |
+| Moyenne (liste, grid) | 0.4" x 0.4" | 256px |
+| Petite (inline, label) | 0.25" x 0.25" | 128px |
+
+### Couleurs selon le fond
+
+| Fond | Couleur d'icone recommandee |
+|------|-----------------------------|
+| Blanc / Gris clair | Bleu CdS (`#1F519B`) |
+| Bleu CdS | Blanc (`#FFFFFF`) ou Or (`#FDC948`) |
+| Cercle bleu transparent | Bleu CdS fonce |
+
+### Cercles de fond pour icones
+Pour plus de lisibilite, placer les icones dans des cercles colores :
+- Cercle Bleu CdS a 10% de transparence (fond clair)
+- Cercle blanc (fond bleu)
+- Taille du cercle = taille de l'icone + 0.3"
+
+## Regles de variete
+
+> **Obligation** : ne JAMAIS utiliser le meme layout sur toutes les slides.
+> Varier les patterns pour maintenir l'attention et le dynamisme.
+
+### Combinaisons recommandees pour un deck de 10 slides
+
+| Position | Pattern suggere |
+|----------|-----------------|
+| 1 | Cover |
+| 2 | Section divider |
+| 3 | Cards (3 piliers) |
+| 4 | Blocks (architecture) |
+| 5 | Content ou Two-column |
+| 6 | Stats callout (KPI) |
+| 7 | Table ou Chart |
+| 8 | Timeline |
+| 9 | Bullets ou Image+text |
+| 10 | Closing |
+
+### Minimum de variete
+- **< 5 slides** : au moins 3 patterns differents
+- **5-10 slides** : au moins 5 patterns differents
+- **> 10 slides** : au moins 7 patterns differents
 
 ## Anti-patterns — A eviter
 
 1. **Pas de ligne d'accent sous les titres** — signature typique des slides IA
-2. **Pas de fond degrade** — rester sur aplats de couleur
+2. **Pas de fond degrade** — rester sur aplats de couleur (sauf via images de fond)
 3. **Pas de texte or sur fond blanc** pour des paragraphes longs (contraste insuffisant)
 4. **Pas de polices multiples** — tout en Open Sans
 5. **Pas de couleurs hors palette** sauf graphiques de donnees
 6. **Pas de logo deforme** — toujours respecter le ratio d'origine
 7. **Pas de monogramme a la place du logo complet** sur les presentations (sauf contrainte d'espace)
+8. **Pas de slides text-only sans structure** — utiliser des cards, blocks ou bullets
+9. **Pas d'icones a faible contraste** — l'icone ET le texte doivent etre lisibles
+10. **Pas de texte centre pour les paragraphes** — centre uniquement pour les titres
 
 > **Note** : les slides avec uniquement du texte (listes a puces, listes numerotees, paragraphes) sont tout a fait acceptables. Elles doivent toujours comporter la barre de titre bleue et le logo CdS en haut a droite.

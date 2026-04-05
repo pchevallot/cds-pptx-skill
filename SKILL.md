@@ -1,39 +1,53 @@
 ---
 name: cds-pptx
-description: "Use this skill when creating PowerPoint presentations (.pptx) for Le Comptoir des Signaux (CdS). Triggers on: 'CdS', 'Comptoir des Signaux', 'presentation CdS', 'slides CdS', 'deck CdS', or any request for a branded presentation following the CdS visual identity. This skill provides the complete brand guide (colors, typography, layout rules, logos) and a standalone Python script for generating CdS-branded PPTX files."
+description: "Use this skill when creating PowerPoint presentations (.pptx) for Le Comptoir des Signaux (CdS). Triggers on: 'CdS', 'Comptoir des Signaux', 'presentation CdS', 'slides CdS', 'deck CdS', or any request for a branded presentation following the CdS visual identity. Double engine: PptxGenJS for creative slides + matplotlib for complex dataviz (radar, heatmap). Includes QA pipeline and complete brand guide."
 ---
 
-# CdS PPTX — Charte graphique Comptoir des Signaux
+# CdS PPTX v2 — Double Moteur
 
-Ce skill fournit tout le nécessaire pour créer des présentations PowerPoint respectant la charte graphique du Comptoir des Signaux.
+Ce skill genere des presentations PowerPoint respectant la charte graphique du Comptoir des Signaux.
+Il utilise deux moteurs complementaires :
 
-> **LANGUE** : Tout le contenu des présentations DOIT être rédigé en français correct
-> avec les accents (é, è, ê, à, ù, ç, etc.). Ne JAMAIS omettre les accents.
-> Exemples : « Résilience », « stratégie », « collectivités territoriales », « télécommunication ».
+- **PptxGenJS** : slides creatives (ombres, charts natifs, icones, variete de layouts)
+- **matplotlib** : dataviz complexes (radar SOCLE, heatmaps de maturite)
 
-> **LOGOS** : Si le téléchargement depuis GitHub échoue (sandbox sans accès réseau),
-> utiliser les logos embarqués en base64 dans `scripts/logos_b64.py`.
+> **LANGUE** : Tout le contenu des presentations DOIT etre redige en francais correct
+> avec les accents (e, e, e, a, u, c, etc.). Ne JAMAIS omettre les accents.
+> Exemples : « Resilience », « strategie », « collectivites territoriales ».
+
+> **LOGOS** : Si le telechargement depuis GitHub echoue (sandbox sans acces reseau),
+> utiliser les logos embarques en base64 dans `scripts/logos_b64.py`.
 > Importer `LOGO_BLEU_JAUNE_B64` (fond clair) ou `LOGO_JAUNE_BLANC_B64` (fond bleu),
-> décoder avec `base64.b64decode()` et écrire dans un fichier temporaire avant insertion.
+> decoder et utiliser comme source `data:` dans PptxGenJS.
+
+---
+
+## Quick Reference
+
+| Tache | Guide |
+|-------|-------|
+| Creer une presentation | Lire [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Generer une dataviz (radar, heatmap) | Lire [dataviz.md](dataviz.md) |
+| Consulter la charte complete | Lire [references/brand-guide.md](references/brand-guide.md) |
+
+---
 
 ## Palette de couleurs
 
+Hex **SANS** `#` — obligation PptxGenJS.
+
 | Nom | Hex | RGB | Usage |
 |-----|-----|-----|-------|
-| **Bleu CdS** | `#1F519B` | 31, 81, 155 | Couleur principale. Titres, barres, fonds de slides de couverture |
-| **Or CdS** | `#FDC948` | 253, 201, 72 | Couleur secondaire. Accents, sous-titres, mise en valeur |
-| **Blanc** | `#FFFFFF` | 255, 255, 255 | Texte sur fond bleu, fonds clairs |
-| **Gris fonce** | `#333333` | 51, 51, 51 | Texte courant sur fond clair |
-| **Gris clair** | `#F5F5F5` | 245, 245, 245 | Fonds secondaires, lignes alternees de tableaux |
+| **Bleu CdS** | `1F519B` | 31, 81, 155 | Couleur principale. Titres, barres, fonds couverture |
+| **Or CdS** | `FDC948` | 253, 201, 72 | Accents, sous-titres, mise en valeur |
+| **Blanc** | `FFFFFF` | 255, 255, 255 | Texte sur fond bleu, fonds clairs |
+| **Gris fonce** | `333333` | 51, 51, 51 | Texte courant sur fond clair |
+| **Gris clair** | `F5F5F5` | 245, 245, 245 | Fonds secondaires, lignes alternees |
+| Vert | `4CAF50` | 76, 175, 80 | Validation, positif (graphiques) |
+| Orange | `FF9800` | 255, 152, 0 | Attention, en cours (graphiques) |
+| Rouge | `F44336` | 244, 67, 54 | Alerte, critique (graphiques) |
 
-### Regles d'utilisation des couleurs
-
-- **Fond de slide de couverture** : Bleu CdS (`#1F519B`) avec texte blanc et accents or
-- **Fond de slides de contenu** : Blanc (`#FFFFFF`) avec texte gris fonce
-- **Barre de titre** : Rectangle pleine largeur en Bleu CdS, texte blanc, hauteur ~1"
-- **En-tetes de tableaux** : Fond Bleu CdS, texte blanc, gras
-- **Liens et accents** : Or CdS (`#FDC948`)
-- **Ne jamais utiliser** de couleurs hors palette sauf pour des graphiques de donnees (vert validation `#4CAF50`, orange attention `#FF9800`, rouge alerte `#F44336`)
+---
 
 ## Typographie
 
@@ -44,21 +58,20 @@ Ce skill fournit tout le nécessaire pour créer des présentations PowerPoint r
 | Texte courant | Open Sans | 14-16pt | Regular |
 | Legendes / notes | Open Sans | 10-12pt | Regular, couleur attenuee |
 | En-tetes tableau | Open Sans | 12-14pt | Bold, blanc sur bleu |
-| Contenu tableau | Open Sans | 11-12pt | Regular |
 
 > **Fallback** : si Open Sans n'est pas disponible, utiliser Calibri (Windows) ou Carlito (Linux).
 
-## Logos — URLs de telechargement
+---
 
-Les logos sont heberges sur GitHub. Utiliser les URLs `raw.githubusercontent.com` pour les telecharger dans les scripts.
+## Logos — URLs de telechargement
 
 ### Logos complets (ratio ~4:1)
 
 | Variante | Usage | URL |
 |----------|-------|-----|
-| **Bleu-Jaune** | Standard, fond clair | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Bleu-Jaune.png` |
 | **Jaune-Blanc** | Fond bleu/sombre | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Jaune-Blanc.png` |
-| **Bleu-Blanc** | Monochrome bleu | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Bleu-Blanc.png` |
+| **Bleu-Jaune** | Fond clair | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Bleu-Jaune.png` |
+| **Bleu-Blanc** | Monochrome | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Bleu-Blanc.png` |
 | **Noir** | Impression N&B | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Noir.png` |
 | **Blanc** | Fond tres sombre | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/logos/CDS-Logo-Blanc.png` |
 
@@ -75,211 +88,180 @@ Les logos sont heberges sur GitHub. Utiliser les URLs `raw.githubusercontent.com
 
 | Variante | URL |
 |----------|-----|
+| Jaune horizontal | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-jaune-horizontal.png` |
 | Bleu horizontal | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-bleu-horizontal.png` |
 | Blanc horizontal | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-blanc-horizontal.png` |
-| Jaune horizontal | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-jaune-horizontal.png` |
+| Jaune vertical | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-jaune-vertical.png` |
 | Bleu vertical | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-bleu-vertical.png` |
 | Blanc vertical | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-blanc-vertical.png` |
-| Jaune vertical | `https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets/bandeaux/Bandeau-motifs-jaune-vertical.png` |
 
-## Mise en page
+---
 
-### Dimensions
+## Matrice de routage moteur
 
-- **Format** : 16:9 widescreen (13.333" x 7.5")
-- **Marges minimales** : 0.5" sur tous les cotes
-- **Espacement entre blocs** : 0.3" - 0.5"
+| Type de slide | Moteur | Fichier de reference |
+|---|---|---|
+| Cover, section, closing | PptxGenJS | [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Content, bullets, two-column | PptxGenJS | [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Cards, blocks, stats callouts | PptxGenJS | [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Tables, charts natifs (bar/pie/line) | PptxGenJS | [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Timeline, icon grid, quote, image+text | PptxGenJS | [pptxgenjs-cds.md](pptxgenjs-cds.md) |
+| Radar SOCLE (polaire, 5 dimensions) | matplotlib → PNG → PptxGenJS | [dataviz.md](dataviz.md) |
+| Heatmap de maturite | matplotlib → PNG → PptxGenJS | [dataviz.md](dataviz.md) |
+| Dataviz complexe (scatter, bubble) | matplotlib → PNG → PptxGenJS | [dataviz.md](dataviz.md) |
 
-### Structure type d'une slide
+---
 
-```
-+--------------------------------------------------+
-| [Barre titre bleue #1F519B, h=1"]   [Logo 0.5"]  |
-|                                                    |
-|  Zone de contenu                                   |
-|  (debut a 1.5" du haut)                           |
-|  (largeur utile : ~12.333")                       |
-|  (hauteur utile : ~5.5")                          |
-|                                                    |
-+--------------------------------------------------+
-```
+## Comportement attendu
 
-### Regles de placement du logo
-
-- **Slides de contenu** : logo clair **Jaune-Blanc** dans la barre titre bleue, en haut a droite, hauteur 0.5", marge 0.2" du bord
-- **Slide de couverture** : logo clair (Jaune-Blanc) centre, hauteur 1.2"
-- **Ratio du logo** : ~4:1 (largeur = hauteur x 4)
-- **IMPORTANT** : sur fond bleu, toujours utiliser la variante Jaune-Blanc (jamais Bleu-Jaune dont le texte bleu serait invisible)
-
-### Bandeau de motifs
-
-- **Slides de couverture et de cloture** : bandeau jaune horizontal en bas de slide
-- **Ratio preserve** : ne JAMAIS etirer le bandeau — toujours calculer la hauteur a partir du ratio reel de l'image
-- La methode `_add_bandeau()` du script gere automatiquement le ratio
-- Hauteur max : 1.2" pour ne pas empieter sur le contenu
-
-### Tableaux
-
-- En-tete : fond Bleu CdS, texte blanc gras, centre
-- Lignes alternees : blanc / Gris clair (`#F5F5F5`)
-- Bordures : fines, gris clair
-- Padding interne : suffisant pour la lisibilite
-
-## Script Python — Boite a outils
-
-Un script autonome est disponible dans `scripts/cds_pptx.py`. Il fournit une classe `CdsPptxBuilder` avec des methodes reutilisables :
-
-- `add_cover(title, subtitle)` — slide de couverture (fond bleu, logo clair centre)
-- `add_content_slide(title, content)` — slide texte simple avec barre titre + logo
-- `add_bullet_slide(title, bullets)` — slide avec liste a puces
-- `add_blocks_slide(title, blocks)` — **blocs empiles avec barres verticales colorees** (architectures, couches, processus)
-- `add_cards_slide(title, cards, footnote)` — **cartes cote a cote** avec barre d'accent coloree (comparatifs, piliers, faits cles)
-- `add_table_slide(title, headers, rows)` — slide avec tableau formate
-- `add_chart_slide(title, image_path)` — slide avec graphique (image PNG/JPG)
-- `add_radar_slide(title, labels, datasets, chart_title)` — slide avec diagramme radar matplotlib (ratio carre garanti)
-- `add_section_slide(title, subtitle)` — slide de separation (fond bleu)
-- `add_closing_slide(text, contact)` — slide de cloture (avec bandeau decoratif)
-
-### Comportement attendu
-
-> **IMPORTANT** : la fonction `main()` du script est un simple exemple de demonstration.
-> Ne JAMAIS generer les slides d'exemple a la place du contenu demande par l'utilisateur.
->
-> Quand l'utilisateur demande une presentation, tu DOIS :
+> **IMPORTANT** : Quand l'utilisateur demande une presentation, tu DOIS :
 > 1. Comprendre le contenu specifique qu'il souhaite presenter
-> 2. Ecrire un script Python qui utilise la classe `CdsPptxBuilder` pour creer
->    exactement les slides correspondant a SON contenu
-> 3. Appliquer systematiquement la charte CdS (couleurs, Open Sans, logos, mise en page)
->
-> Le script est une boite a outils, pas un generateur de demo.
+> 2. Ecrire un script JS (PptxGenJS) qui genere exactement les slides de SON contenu
+> 3. Si des dataviz complexes sont necessaires, generer d'abord les PNG via `cds_charts.py`
+> 4. **Varier les layouts** : ne JAMAIS utiliser le meme pattern sur toutes les slides
+> 5. Appliquer systematiquement la charte CdS (couleurs, Open Sans, logos, mise en page)
+> 6. Executer le pipeline QA avant de declarer succes
 
-### Dependances
+---
+
+## Design de slides — Regles de choix de pattern
+
+| Type de contenu | Pattern recommande |
+|---|---|
+| Texte libre, paragraphes simples | `addContentSlide` |
+| Liste de points | `addBulletSlide` |
+| Deux contenus cote a cote | `addTwoColumnSlide` |
+| Couches, categories, processus | `addBlocksSlide` |
+| Comparaison 2-4 elements | `addCardsSlide` |
+| KPI, metriques cles | `addStatsSlide` |
+| Donnees tabulaires | `addTableSlide` |
+| Bar/Line/Pie chart | `addBarChartSlide` / `addLineChartSlide` / `addPieChartSlide` |
+| Jalons, planning | `addTimelineSlide` |
+| Features avec icones | `addIconGridSlide` |
+| Citation, verbatim | `addQuoteSlide` |
+| Image illustrative + texte | `addImageTextSlide` |
+| Radar de maturite | matplotlib `generate_radar()` → PNG → `addImage` |
+| Heatmap | matplotlib `generate_heatmap()` → PNG → `addImage` |
+
+---
+
+## Pipeline QA (obligatoire)
+
+**Assumer qu'il y a des problemes. Le premier rendu n'est presque jamais correct.**
+
+### Etape 1 : Generation du .pptx
 
 ```bash
-pip install python-pptx requests matplotlib numpy Pillow
+node generate_presentation.js
 ```
 
-### Exemple d'integration
+### Etape 2 : Conversion en images
 
-```python
-from cds_pptx import CdsPptxBuilder
-
-builder = CdsPptxBuilder()
-
-# Adapter les slides au contenu reel de l'utilisateur
-builder.add_cover("Titre de la presentation", "Sous-titre ou client")
-builder.add_bullet_slide("Points cles", ["Premier point", "Deuxieme point"])
-builder.add_table_slide("Resultats", ["Indicateur", "Valeur"], [["Taux", "85%"]])
-builder.add_closing_slide("Merci", "contact@comptoirdessignaux.com")
-
-builder.save("ma_presentation.pptx")
+```bash
+python scripts/office/soffice.py --headless --convert-to pdf output.pptx
+pdftoppm -jpeg -r 150 output.pdf slide
 ```
 
-Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
+Cree `slide-01.jpg`, `slide-02.jpg`, etc.
 
-## Design de slides — Regles de choix de methode
+### Etape 3 : Inspection visuelle via subagent
 
-> **IMPORTANT** : Ne jamais utiliser `add_content_slide()` pour du contenu structure.
-> Choisir la methode la plus adaptee au type de contenu :
+Utiliser un subagent avec ce prompt :
 
-| Type de contenu | Methode a utiliser |
-|---|---|
-| Texte libre, paragraphes simples | `add_content_slide()` |
-| Liste de points | `add_bullet_slide()` |
-| Couches, categories, processus en etapes | **`add_blocks_slide()`** |
-| Comparaison cote a cote (2-4 elements) | **`add_cards_slide()`** |
-| Donnees tabulaires | `add_table_slide()` |
-| Graphique / image | `add_chart_slide()` |
-| Diagramme radar | `add_radar_slide()` |
+```
+Inspecter visuellement ces slides. Assumer qu'il y a des problemes — les trouver.
 
-### Slides de blocs — `add_blocks_slide()`
+Chercher :
+- Elements qui se chevauchent (texte a travers des formes, lignes a travers des mots)
+- Texte coupe ou debordant des limites
+- Elements trop proches (< 0.3" de gap) ou crampes
+- Espacement inegal (grande zone vide d'un cote, dense de l'autre)
+- Marges insuffisantes depuis les bords (< 0.5")
+- Colonnes ou elements similaires non alignes
+- Texte a faible contraste
+- Accents manquants dans le texte francais
+- Logo absent ou mal positionne
 
-Ideale pour les architectures en couches, les processus sequentiels, ou les
-categories avec titres et descriptions. Chaque bloc a une barre verticale
-coloree a gauche (les couleurs cyclent automatiquement dans la palette CdS).
+Pour chaque slide, lister les problemes trouves, meme mineurs.
 
-```python
-builder.add_blocks_slide(
-    title="Architecture tri-couche",
-    blocks=[
-        {"title": "Infrastructure", "content": "Fibre · LoRaWAN · Energie 72h+"},
-        {"title": "Services & Donnees", "content": "Cloud souverain · Chiffrement", "color": "#FDC948"},
-        {"title": "Usages & Gouvernance", "content": "PCA/PRA · Supervision", "color": "#4CAF50"},
-    ],
-)
+Lire et analyser ces images :
+1. /path/to/slide-01.jpg (Attendu : [description])
+2. /path/to/slide-02.jpg (Attendu : [description])
+
+Signaler TOUS les problemes trouves.
 ```
 
-### Slides de cartes — `add_cards_slide()`
+### Etape 4 : Boucle fix-and-verify
 
-Ideale pour comparer 2 a 4 concepts, piliers, ou faits cles cote a cote.
-Chaque carte a un fond gris clair, une barre d'accent coloree en haut,
-un titre en bleu et du texte descriptif.
+1. Corriger les problemes identifies
+2. Reconvertir en images les slides affectees
+3. Re-inspecter
+4. Repeter jusqu'a ce qu'un pass complet ne revele aucun nouveau probleme
 
-```python
-builder.add_cards_slide(
-    title="Trois enjeux majeurs",
-    cards=[
-        {"title": "Risques climatiques", "content": "+40% d'incidents depuis 2018"},
-        {"title": "Dependance numerique", "content": "93% des services publics connectes"},
-        {"title": "Empreinte carbone", "content": "Objectif -25% d'ici 2030"},
-    ],
-    footnote="Sources : ARCEP 2024, DNUM 2025",
-)
+**Ne JAMAIS declarer succes sans au moins un cycle fix+verify.**
+
+---
+
+## Anti-patterns — A ne JAMAIS faire
+
+### Charte graphique
+1. **Jamais de ligne d'accent sous les titres** — signature typique des slides IA
+2. **Jamais de texte or sur fond blanc** pour des paragraphes longs (contraste insuffisant)
+3. **Jamais de logo Bleu-Jaune sur fond bleu** — utiliser Jaune-Blanc
+4. **Jamais de logo deforme** — toujours respecter le ratio 4:1
+5. **Jamais de couleurs hors palette** sauf graphiques de donnees
+6. **Jamais le meme layout sur toutes les slides** — varier les patterns !
+
+### PptxGenJS
+7. **Jamais de `#` dans les couleurs hex** : `"1F519B"` pas `"#1F519B"`
+8. **Jamais reutiliser un objet options** : `makeShadow()` pour chaque appel
+9. **Jamais de bullets Unicode** : utiliser `bullet: true`
+10. **Jamais encoder l'opacite dans le hex** : utiliser `opacity: 0.15`
+11. **Jamais d'offset d'ombre negatif** : corromprait le fichier
+12. **Jamais de `ROUNDED_RECTANGLE` avec overlay rectangulaire** : coins non couverts
+
+### Dataviz
+13. **Jamais de radar en format rectangulaire** : `figsize=(8, 8)` + `set_aspect("equal")`
+14. **Jamais oublier `bbox_inches="tight"`** dans les savefig matplotlib
+
+---
+
+## Dependances
+
+### Obligatoires
+
+```bash
+npm install -g pptxgenjs
+pip install matplotlib numpy Pillow
 ```
 
-### Titres adaptatifs (couverture, cloture, section)
+### Optionnelles
 
-Les slides de couverture, de cloture et de section ajustent automatiquement
-la taille de police du titre en fonction de sa longueur :
-- ≤ 30 caracteres : 48pt
-- ≤ 50 caracteres : 40pt
-- ≤ 80 caracteres : 34pt
-- ≤ 120 caracteres : 28pt
-- au-dela : 24pt
+```bash
+# Icones (pour le pattern Icon Grid)
+npm install -g react-icons react react-dom sharp
 
-Cela evite que les titres longs debordent sur le sous-titre ou la date.
-
-## Diagrammes radar — Regles imperatives
-
-> **Toujours utiliser `add_radar_slide()`** pour les diagrammes radar au lieu de generer
-> manuellement un graphique matplotlib puis l'inserer avec `add_chart_slide()`.
->
-> La methode `add_radar_slide()` garantit :
-> - Format carre (`figsize=(8, 8)`) pour un radar non deforme
-> - `ax.set_aspect("equal")` pour un cercle parfait
-> - Couleurs CdS automatiques (Bleu, Or, Rouge, Vert, Orange)
-> - Legende positionnee hors du graphique (pas de chevauchement)
-> - DPI 150 pour une image nette
-
-### Exemple d'utilisation
-
-```python
-builder.add_radar_slide(
-    title="Comparatif des dimensions",
-    labels=["Axe 1", "Axe 2", "Axe 3", "Axe 4", "Axe 5"],
-    datasets=[
-        {"label": "Situation actuelle", "values": [3, 5, 2, 4, 6]},
-        {"label": "Cible", "values": [8, 9, 7, 8, 9], "color": "#FDC948"},
-    ],
-    chart_title="Radar de maturite",
-)
+# QA visuelle (conversion en images)
+# LibreOffice (soffice) + Poppler (pdftoppm)
 ```
 
-### Si tu dois generer un graphique matplotlib manuellement
-
-- **Toujours** utiliser `figsize=(8, 8)` pour les radars (carre)
-- **Toujours** appeler `ax.set_aspect("equal")`
-- **Toujours** sauvegarder avec `dpi=150, bbox_inches="tight"`
-- **Toujours** placer la legende avec `bbox_to_anchor` hors de la zone du graphique
-- **Ne jamais** utiliser `figsize=(10, 6)` ou tout autre format rectangulaire pour un radar
+---
 
 ## Checklist avant livraison
 
 - [ ] Police Open Sans utilisee partout (pas d'Arial, pas de Calibri)
-- [ ] Couleurs exclusivement issues de la palette CdS
-- [ ] Logo Jaune-Blanc sur barre titre bleue et slides de couverture (jamais Bleu-Jaune sur fond bleu)
-- [ ] Bandeau de motifs non deforme sur couverture et cloture (ratio preserve)
+- [ ] Couleurs exclusivement issues de la palette CdS (hex SANS `#`)
+- [ ] Logo Jaune-Blanc sur barre titre bleue et slides de couverture
+- [ ] Bandeau de motifs sur couverture et cloture (ratio preserve)
 - [ ] Barre de titre bleue sur toutes les slides de contenu
 - [ ] Marges respectees (0.5" minimum)
-- [ ] Texte align a gauche (sauf titres centres)
+- [ ] Texte aligne a gauche (sauf titres centres)
 - [ ] Tableaux avec en-tetes bleus et lignes alternees
+- [ ] Layouts varies (pas le meme pattern partout)
+- [ ] Ombres sur les cards et blocs (via `makeShadow()`)
+- [ ] Accents francais presents partout
+- [ ] Pipeline QA execute (au moins un cycle fix+verify)
+- [ ] Pas de ligne d'accent sous les titres
+- [ ] factory `makeShadow()` utilisee (jamais de reutilisation d'objet)
+
+Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
