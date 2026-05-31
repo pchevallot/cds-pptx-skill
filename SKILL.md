@@ -1,9 +1,9 @@
 ---
 name: cds-pptx
-description: "Use this skill when creating PowerPoint presentations (.pptx) for Le Comptoir des Signaux (CdS). Triggers on: 'CdS', 'Comptoir des Signaux', 'presentation CdS', 'slides CdS', 'deck CdS', or any request for a branded presentation following the CdS visual identity. Double engine: PptxGenJS for creative slides + matplotlib for complex dataviz (radar, heatmap). Includes QA pipeline and complete brand guide."
+description: "Use this skill when creating PowerPoint presentations (.pptx) for Comptoir des Signaux (CdS). Triggers on: 'CdS', 'Comptoir des Signaux', 'presentation CdS', 'slides CdS', 'deck CdS', or any request for a branded presentation following the CdS visual identity. Double engine: PptxGenJS for creative slides + matplotlib for complex dataviz (radar, heatmap). Includes QA pipeline and complete brand guide."
 ---
 
-# CdS PPTX v2 — Double Moteur
+# CdS PPTX v2 : Double Moteur
 
 Ce skill genere des presentations PowerPoint respectant la charte graphique du Comptoir des Signaux.
 Il utilise deux moteurs complementaires :
@@ -34,7 +34,7 @@ Il utilise deux moteurs complementaires :
 
 ## Palette de couleurs
 
-Hex **SANS** `#` — obligation PptxGenJS.
+Hex **SANS** `#` : obligation PptxGenJS.
 
 | Nom | Hex | RGB | Usage |
 |-----|-----|-----|-------|
@@ -63,7 +63,7 @@ Hex **SANS** `#` — obligation PptxGenJS.
 
 ---
 
-## Logos — URLs de telechargement
+## Logos : URLs de telechargement
 
 ### Logos complets (ratio ~4:1)
 
@@ -112,6 +112,21 @@ Hex **SANS** `#` — obligation PptxGenJS.
 
 ---
 
+## Schémas Excalidraw (croquis manuscrit, optionnel)
+
+Pour un schéma au rendu « croquis à la main » (utile en atelier grand public ou
+pour dédramatiser un mécanisme), la skill `excalidraw-diagram` génère un PNG
+rebrandé CdS que l'on insère ici via `addImage` (comme un PNG matplotlib).
+**Pas de fusion de skills** : Excalidraw produit l'image, cds-pptx l'assemble.
+
+Workflow, quand l'utiliser, et leçons d'installation (version esm.sh à épingler,
+accents validés) : voir `~/.claude/skills/excalidraw-diagram/CDS-INTEGRATION.md`.
+
+Pour un public technique, préférer en général les schémas PptxGenJS natifs
+(rendu net, cohérent avec le reste du deck).
+
+---
+
 ## Comportement attendu
 
 > **IMPORTANT** : Quand l'utilisateur demande une presentation, tu DOIS :
@@ -124,7 +139,7 @@ Hex **SANS** `#` — obligation PptxGenJS.
 
 ---
 
-## Design de slides — Regles de choix de pattern
+## Design de slides : Regles de choix de pattern
 
 | Type de contenu | Pattern recommande |
 |---|---|
@@ -169,7 +184,7 @@ Cree `slide-01.jpg`, `slide-02.jpg`, etc.
 Utiliser un subagent avec ce prompt :
 
 ```
-Inspecter visuellement ces slides. Assumer qu'il y a des problemes — les trouver.
+Inspecter visuellement ces slides. Assumer qu'il y a des problemes : les trouver.
 
 Chercher :
 - Elements qui se chevauchent (texte a travers des formes, lignes a travers des mots)
@@ -202,15 +217,15 @@ Signaler TOUS les problemes trouves.
 
 ---
 
-## Anti-patterns — A ne JAMAIS faire
+## Anti-patterns : A ne JAMAIS faire
 
 ### Charte graphique
-1. **Jamais de ligne d'accent sous les titres** — signature typique des slides IA
+1. **Jamais de ligne d'accent sous les titres** : signature typique des slides IA
 2. **Jamais de texte or sur fond blanc** pour des paragraphes longs (contraste insuffisant)
-3. **Jamais de logo Bleu-Jaune sur fond bleu** — utiliser Jaune-Blanc
-4. **Jamais de logo deforme** — toujours respecter le ratio 4:1
+3. **Jamais de logo Bleu-Jaune sur fond bleu** : utiliser Jaune-Blanc
+4. **Jamais de logo deforme** : toujours respecter le ratio 4:1
 5. **Jamais de couleurs hors palette** sauf graphiques de donnees
-6. **Jamais le meme layout sur toutes les slides** — varier les patterns !
+6. **Jamais le meme layout sur toutes les slides** : varier les patterns !
 
 ### PptxGenJS
 7. **Jamais de `#` dans les couleurs hex** : `"1F519B"` pas `"#1F519B"`

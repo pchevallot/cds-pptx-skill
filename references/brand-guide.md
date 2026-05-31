@@ -1,4 +1,4 @@
-# Guide de marque — Le Comptoir des Signaux
+# Guide de marque : Comptoir des Signaux
 
 ## Identite visuelle
 
@@ -11,24 +11,24 @@ Le ton est **professionnel, institutionnel et accessible**. Les presentations do
 ### Couleurs principales
 
 ```
-Bleu CdS     #1F519B    rgb(31, 81, 155)     — Confiance, institution, serieux
-Or CdS       #FDC948    rgb(253, 201, 72)    — Excellence, mise en valeur, accent
+Bleu CdS     #1F519B    rgb(31, 81, 155)     : Confiance, institution, serieux
+Or CdS       #FDC948    rgb(253, 201, 72)    : Excellence, mise en valeur, accent
 ```
 
 ### Couleurs neutres
 
 ```
-Blanc         #FFFFFF    rgb(255, 255, 255)   — Fonds, texte sur bleu
-Gris fonce    #333333    rgb(51, 51, 51)      — Texte courant
-Gris clair    #F5F5F5    rgb(245, 245, 245)   — Fonds secondaires
+Blanc         #FFFFFF    rgb(255, 255, 255)   : Fonds, texte sur bleu
+Gris fonce    #333333    rgb(51, 51, 51)      : Texte courant
+Gris clair    #F5F5F5    rgb(245, 245, 245)   : Fonds secondaires
 ```
 
 ### Couleurs fonctionnelles (graphiques et indicateurs uniquement)
 
 ```
-Vert          #4CAF50    rgb(76, 175, 80)     — Validation, termine, positif
-Orange        #FF9800    rgb(255, 152, 0)     — Attention, en cours
-Rouge         #F44336    rgb(244, 67, 54)     — Alerte, critique
+Vert          #4CAF50    rgb(76, 175, 80)     : Validation, termine, positif
+Orange        #FF9800    rgb(255, 152, 0)     : Attention, en cours
+Rouge         #F44336    rgb(244, 67, 54)     : Alerte, critique
 ```
 
 ### Ratios de contraste
@@ -43,7 +43,7 @@ Rouge         #F44336    rgb(244, 67, 54)     — Alerte, critique
 | Blanc sur Rouge | Indicateurs | Bon (4.6:1) |
 
 > **WCAG AA** : ratio minimum 4.5:1 pour le texte courant, 3:1 pour les grands titres (>= 18pt bold).
-> Le texte Or sur Blanc ne respecte pas ces seuils — ne l'utiliser que pour de courts accents decoratifs.
+> Le texte Or sur Blanc ne respecte pas ces seuils : ne l'utiliser que pour de courts accents decoratifs.
 
 ## Typographie
 
@@ -60,8 +60,8 @@ Open Sans est une police sans-serif humaniste, lisible et professionnelle. Elle 
 ### Polices de substitution
 
 Si Open Sans n'est pas installe sur le systeme :
-1. **Calibri** (Windows) — geometrique, tres proche
-2. **Carlito** (Linux) — clone metrique de Calibri
+1. **Calibri** (Windows) : geometrique, tres proche
+2. **Carlito** (Linux) : clone metrique de Calibri
 3. **Arial** (dernier recours)
 
 ### Regles typographiques
@@ -131,7 +131,7 @@ Disponibles en 3 couleurs (bleu, blanc, jaune) x 2 orientations (horizontal, ver
 ```
 +--[ 13.333" ]------------------------------------+
 |                                                   | 0.25"
-| [ Barre titre — pleine largeur, h=1" ]  [Logo]  |
+| [ Barre titre : pleine largeur, h=1" ]  [Logo]  |
 |                                                   | 0.5"
 |  0.5" |  Zone de contenu (12.333" x 5.5")  | 0.5"|
 |       |                                     |     |
@@ -166,7 +166,7 @@ Les ombres ajoutent de la profondeur aux cards, blocs et images. Parametres stan
 ### Ombre standard (cards, blocs, images)
 
 ```javascript
-// PptxGenJS — toujours utiliser une factory, jamais reutiliser l'objet
+// PptxGenJS : toujours utiliser une factory, jamais reutiliser l'objet
 const makeShadow = () => ({
   type: "outer",
   color: "000000",    // Noir, SANS #
@@ -198,7 +198,7 @@ const makeShadowUp = () => ({
 
 ### Piege PptxGenJS : mutation in-place
 PptxGenJS modifie les objets d'options en place lors du rendu.
-**Ne JAMAIS partager un objet ombre entre plusieurs appels** — utiliser une factory (`makeShadow()`).
+**Ne JAMAIS partager un objet ombre entre plusieurs appels** : utiliser une factory (`makeShadow()`).
 
 ## Degrades
 
@@ -260,17 +260,17 @@ Pour plus de lisibilite, placer les icones dans des cercles colores :
 - **5-10 slides** : au moins 5 patterns differents
 - **> 10 slides** : au moins 7 patterns differents
 
-## Anti-patterns — A eviter
+## Anti-patterns : A eviter
 
-1. **Pas de ligne d'accent sous les titres** — signature typique des slides IA
-2. **Pas de fond degrade** — rester sur aplats de couleur (sauf via images de fond)
+1. **Pas de ligne d'accent sous les titres** : signature typique des slides IA
+2. **Pas de fond degrade** : rester sur aplats de couleur (sauf via images de fond)
 3. **Pas de texte or sur fond blanc** pour des paragraphes longs (contraste insuffisant)
-4. **Pas de polices multiples** — tout en Open Sans
+4. **Pas de polices multiples** : tout en Open Sans
 5. **Pas de couleurs hors palette** sauf graphiques de donnees
-6. **Pas de logo deforme** — toujours respecter le ratio d'origine
+6. **Pas de logo deforme** : toujours respecter le ratio d'origine
 7. **Pas de monogramme a la place du logo complet** sur les presentations (sauf contrainte d'espace)
-8. **Pas de slides text-only sans structure** — utiliser des cards, blocks ou bullets
-9. **Pas d'icones a faible contraste** — l'icone ET le texte doivent etre lisibles
-10. **Pas de texte centre pour les paragraphes** — centre uniquement pour les titres
+8. **Pas de slides text-only sans structure** : utiliser des cards, blocks ou bullets
+9. **Pas d'icones a faible contraste** : l'icone ET le texte doivent etre lisibles
+10. **Pas de texte centre pour les paragraphes** : centre uniquement pour les titres
 
 > **Note** : les slides avec uniquement du texte (listes a puces, listes numerotees, paragraphes) sont tout a fait acceptables. Elles doivent toujours comporter la barre de titre bleue et le logo CdS en haut a droite.

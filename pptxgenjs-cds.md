@@ -1,6 +1,6 @@
-# PptxGenJS — Patterns CdS
+# PptxGenJS : Patterns CdS
 
-Guide complet pour creer des presentations Le Comptoir des Signaux avec PptxGenJS.
+Guide complet pour creer des presentations brandees Comptoir des Signaux avec PptxGenJS.
 Chaque pattern fournit du code JS copier-coller pret a l'emploi.
 
 ---
@@ -10,10 +10,10 @@ Chaque pattern fournit du code JS copier-coller pret a l'emploi.
 ```javascript
 const pptxgen = require("pptxgenjs");
 let pres = new pptxgen();
-pres.layout = "LAYOUT_WIDE";  // 13.33" x 7.5" — format CdS standard
-pres.author = "Le Comptoir des Signaux";
+pres.layout = "LAYOUT_WIDE";  // 13.33" x 7.5" : format CdS standard
+pres.author = "Comptoir des Signaux";
 
-// ─── Palette CdS (SANS # — obligation PptxGenJS) ───
+// ─── Palette CdS (SANS # : obligation PptxGenJS) ───
 const CDS = {
   BLEU: "1F519B",
   OR: "FDC948",
@@ -132,7 +132,7 @@ function addCenteredLogo(slide, variant = "jaune_blanc", h = 1.0) {
 
 ---
 
-## 1. Cover — `addCoverSlide`
+## 1. Cover : `addCoverSlide`
 
 Slide de couverture : fond bleu, logo centre, titre adaptatif, sous-titre Or, date, bandeau.
 
@@ -143,7 +143,7 @@ function addCoverSlide(pres, title, subtitle = "", dateStr = "") {
   // Logo centre
   addCenteredLogo(slide, "jaune_blanc", 1.0);
 
-  // Titre — taille adaptative
+  // Titre : taille adaptative
   slide.addText(title, {
     x: 1, y: 1.9, w: W - 2, h: 2.8,
     fontSize: adaptiveFontSize(title),
@@ -176,7 +176,7 @@ function addCoverSlide(pres, title, subtitle = "", dateStr = "") {
 
 ---
 
-## 2. Section divider — `addSectionSlide`
+## 2. Section divider : `addSectionSlide`
 
 Separateur de section : fond bleu, titre centre, sous-titre Or, pas de logo ni bandeau.
 
@@ -204,7 +204,7 @@ function addSectionSlide(pres, title, subtitle = "") {
 
 ---
 
-## 3. Content — `addContentSlide`
+## 3. Content : `addContentSlide`
 
 Slide de contenu texte simple avec barre titre + logo.
 
@@ -232,7 +232,7 @@ function addContentSlide(pres, title, content) {
 
 ---
 
-## 4. Bullets — `addBulletSlide`
+## 4. Bullets : `addBulletSlide`
 
 Slide avec liste a puces. Utiliser `bullet: true`, jamais de caracteres Unicode.
 
@@ -267,7 +267,7 @@ function addBulletSlide(pres, title, bullets) {
 
 ---
 
-## 5. Two-column — `addTwoColumnSlide`
+## 5. Two-column : `addTwoColumnSlide`
 
 Deux colonnes cote a cote : texte/texte, texte/image, ou image/texte.
 
@@ -332,7 +332,7 @@ function addTwoColumnSlide(pres, title, left, right) {
 
 ---
 
-## 6. Cards — `addCardsSlide`
+## 6. Cards : `addCardsSlide`
 
 2-4 cartes cote a cote avec ombres et barres d'accent colorees. Ideal pour comparer concepts, piliers ou faits cles.
 
@@ -405,7 +405,7 @@ function addCardsSlide(pres, title, cards, footnote = "") {
 
 ---
 
-## 7. Blocks — `addBlocksSlide`
+## 7. Blocks : `addBlocksSlide`
 
 Blocs empiles avec barres verticales colorees. Ideal pour architectures en couches, processus, categories.
 
@@ -468,7 +468,7 @@ function addBlocksSlide(pres, title, blocks) {
 
 ---
 
-## 8. Stats callout — `addStatsSlide`
+## 8. Stats callout : `addStatsSlide`
 
 Grands chiffres dans des blocs colores pour mettre en valeur des KPI ou metriques cles.
 
@@ -523,7 +523,7 @@ function addStatsSlide(pres, title, stats) {
 
 ---
 
-## 9. Table — `addTableSlide`
+## 9. Table : `addTableSlide`
 
 Tableau brande : en-tetes bleus, lignes alternees, bordures fines.
 
@@ -590,7 +590,7 @@ function addTableSlide(pres, title, headers, rows, colWidths = null) {
 
 ---
 
-## 10. Native chart — `addChartSlide`
+## 10. Native chart : `addChartSlide`
 
 Charts PptxGenJS natifs (BAR, LINE, PIE) aux couleurs CdS. Interactifs dans PowerPoint.
 
@@ -693,7 +693,7 @@ function addPieChartSlide(pres, title, chartData, options = {}) {
 
 ---
 
-## 11. Timeline — `addTimelineSlide`
+## 11. Timeline : `addTimelineSlide`
 
 Frise chronologique horizontale avec cercles, lignes et labels. Ideale pour jalons, etapes, planning.
 
@@ -766,7 +766,7 @@ function addTimelineSlide(pres, title, steps) {
 
 ---
 
-## 12. Icon grid — `addIconGridSlide`
+## 12. Icon grid : `addIconGridSlide`
 
 Grille d'icones (2x3 ou 2x2) avec texte. Necessite react-icons + sharp pour les icones en base64 PNG.
 
@@ -858,7 +858,7 @@ async function iconToBase64Png(IconComponent, color = "#1F519B", size = 256) {
 
 ---
 
-## 13. Quote — `addQuoteSlide`
+## 13. Quote : `addQuoteSlide`
 
 Citation sur fond bleu avec grands guillemets Or.
 
@@ -902,7 +902,7 @@ function addQuoteSlide(pres, quote, attribution = "") {
 
 ---
 
-## 14. Image + text — `addImageTextSlide`
+## 14. Image + text : `addImageTextSlide`
 
 Image a gauche ou droite avec texte a cote.
 
@@ -953,7 +953,7 @@ function addImageTextSlide(pres, title, imagePath, text, imageRight = false) {
 
 ---
 
-## 15. Closing — `addClosingSlide`
+## 15. Closing : `addClosingSlide`
 
 Slide de cloture : fond bleu, logo centre, message "Merci", contact Or, bandeau.
 
@@ -964,7 +964,7 @@ function addClosingSlide(pres, text = "Merci de votre attention", contact = "") 
   // Logo centre
   addCenteredLogo(slide, "jaune_blanc", 1.0);
 
-  // Texte de cloture — taille adaptative
+  // Texte de cloture : taille adaptative
   slide.addText(text, {
     x: 1, y: 1.9, w: W - 2, h: 2.2,
     fontSize: adaptiveFontSize(text),

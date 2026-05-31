@@ -1,4 +1,4 @@
-# CdS PPTX Skill v2 — Double moteur PowerPoint du Comptoir des Signaux
+# CdS PPTX Skill v2 : double moteur PowerPoint, Comptoir des Signaux
 
 Skill pour Claude Code (et autres outils IA) permettant de generer des presentations PowerPoint respectant la charte graphique du **Comptoir des Signaux**.
 
@@ -9,8 +9,8 @@ Skill pour Claude Code (et autres outils IA) permettant de generer des presentat
 ```
 cds-pptx-skill/
 ├── SKILL.md                     # Point d'entree du skill (routing, palette, QA)
-├── pptxgenjs-cds.md             # Guide PptxGenJS — 15 patterns de slides
-├── dataviz.md                   # Guide matplotlib — radar, heatmap, bar, line
+├── pptxgenjs-cds.md             # Guide PptxGenJS : 15 patterns de slides
+├── dataviz.md                   # Guide matplotlib : radar, heatmap, bar, line
 ├── references/
 │   └── brand-guide.md           # Guide de marque complet
 ├── scripts/
@@ -64,7 +64,7 @@ pip install matplotlib numpy Pillow
 npm install -g react-icons react react-dom sharp
 ```
 
-## Charte graphique — Resume
+## Charte graphique : Resume
 
 ### Couleurs
 
@@ -82,21 +82,21 @@ npm install -g react-icons react react-dom sharp
 
 ### 15 patterns de slides disponibles
 
-1. Cover — couverture fond bleu + bandeau
-2. Section divider — separateur fond bleu
-3. Content — texte simple
-4. Bullets — liste a puces
-5. Two-column — deux colonnes
-6. Cards — 2-4 cartes avec ombres
-7. Blocks — blocs empiles avec barres d'accent
-8. Stats callout — grands chiffres KPI
-9. Table — tableau brande
-10. Bar/Line/Pie chart — charts natifs PptxGenJS
-11. Timeline — frise chronologique
-12. Icon grid — grille d'icones
-13. Quote — citation sur fond bleu
-14. Image + text — image et texte cote a cote
-15. Closing — slide de cloture + bandeau
+1. Cover : couverture fond bleu + bandeau
+2. Section divider : separateur fond bleu
+3. Content : texte simple
+4. Bullets : liste a puces
+5. Two-column : deux colonnes
+6. Cards : 2-4 cartes avec ombres
+7. Blocks : blocs empiles avec barres d'accent
+8. Stats callout : grands chiffres KPI
+9. Table : tableau brande
+10. Bar/Line/Pie chart : charts natifs PptxGenJS
+11. Timeline : frise chronologique
+12. Icon grid : grille d'icones
+13. Quote : citation sur fond bleu
+14. Image + text : image et texte cote a cote
+15. Closing : slide de cloture + bandeau
 
 ### Pipeline QA integre
 
@@ -108,4 +108,4 @@ Chaque presentation passe par un cycle obligatoire :
 
 ## Licence
 
-Usage interne Le Comptoir des Signaux. Les logos et la charte graphique sont la propriete du Comptoir des Signaux.
+Usage interne : Comptoir des Signaux. Les logos et la charte graphique sont la propriété du Comptoir des Signaux.

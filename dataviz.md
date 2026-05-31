@@ -1,4 +1,4 @@
-# Dataviz CdS — Graphiques matplotlib
+# Dataviz CdS : Graphiques matplotlib
 
 Guide pour generer des graphiques aux couleurs CdS via matplotlib,
 puis les integrer dans PptxGenJS.
@@ -37,7 +37,7 @@ pip install matplotlib numpy Pillow
 
 #### `generate_radar(labels, datasets, title, output_path) -> Path`
 
-Radar SOCLE — format carre, aspect equal, couleurs CdS.
+Radar SOCLE : format carre, aspect equal, couleurs CdS.
 
 ```python
 from cds_charts import generate_radar
@@ -55,7 +55,7 @@ path = generate_radar(
 
 #### `generate_heatmap(data, row_labels, col_labels, title, output_path, vmin, vmax) -> Path`
 
-Heatmap de maturite — grille coloree avec annotations.
+Heatmap de maturite : grille coloree avec annotations.
 
 ```python
 from cds_charts import generate_heatmap
