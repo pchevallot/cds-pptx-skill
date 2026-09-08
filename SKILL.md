@@ -278,5 +278,6 @@ npm install -g react-icons react react-dom sharp
 - [ ] Pipeline QA execute (au moins un cycle fix+verify)
 - [ ] Pas de ligne d'accent sous les titres
 - [ ] factory `makeShadow()` utilisee (jamais de reutilisation d'objet)
+- [ ] **Metadonnees humaines** (Auteur/Titre/Objet/Mots cles/Categorie/Gestionnaire/Entreprise renseignes, aucune trace `python-pptx`/`PptxGenJS` dans `core.xml`/`app.xml`, Application reelle, dates plausibles) : helper bundle `references/set_ooxml_metadata.py` -> `apply_metadata(path, meta)`, a appeler juste apres la sauvegarde du .pptx. Regle detaillee dans le skill `cds-docx`.
 
 Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
