@@ -282,6 +282,59 @@ npm install -g react-icons react react-dom sharp
 
 Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
 
+## Source unique des assets de charte
+
+**Un seul répertoire fait foi, et il n'est jamais recopié dans un projet.**
+
+| Contexte | Répertoire |
+|---|---|
+| Atelier de production (voie normale) | le répertoire générique de charte de l'atelier, `cds-visuels/charte/` |
+| Skill installée (source licenciée, miroir amont) | `assets/` de la skill |
+| Sandbox sans accès disque | `scripts/logos_b64.py`, base64 embarqué |
+
+Un générateur pointe le répertoire générique par une constante en tête de
+fichier, il n'embarque pas sa copie. Poser le chemin absolu de l'atelier dans
+`CHARTE`, une seule fois :
+
+```javascript
+const CHARTE = process.env.CDS_CHARTE || "<racine de l'atelier>/cds-visuels/charte";
+const LOGOS = {
+  bleu_jaune:  `${CHARTE}/logos/CDS-Logo-Bleu-Jaune.png`,   // fond clair
+  jaune_blanc: `${CHARTE}/logos/CDS-Logo-Jaune-Blanc.png`,  // fond bleu ou sombre
+};
+const BANDEAUX = { jaune_h: `${CHARTE}/bandeaux/Bandeau-motifs-jaune-horizontal.png` };
+```
+
+**Pourquoi cette règle.** Un dossier `assets/` par formation, c'est une charte
+qui existe en autant d'exemplaires que de projets, sans inventaire : le jour où
+elle évolue, rien ne dit ce qu'il faut mettre à jour, et un deck régénéré sort
+avec l'ancien logo sans que rien ne le signale. Constat du 08/09/2026 : 20 PNG
+de charte dispersés dans 12 dossiers de l'atelier.
+
+**Contrôle**, à passer après toute évolution de charte :
+
+```bash
+python3 cds-visuels/verifier-charte.py           # empreintes SHA-256
+python3 cds-visuels/verifier-charte.py --sync    # resynchronise depuis la skill
+```
+
+*(Script propre à l'atelier de production, non distribué avec la skill.)*
+
+Il classe chaque PNG de l'atelier en CONFORME, BASSE DEFINITION connue (les
+variantes 400 px des anciens générateurs, ratio correct, laissées telles quelles
+dans les projets livrés) ou INCONNU, et sort en erreur sur le premier inconnu.
+
+**Ratios natifs**, à ne jamais étirer : logo 2770 x 694, soit 3,99:1 ; bandeau
+de motifs 1453 x 186, soit 7,81:1. Sur une slide de 13,33 pouces, la hauteur
+juste d'un bandeau pleine largeur est `W / 7.81`, soit 1,71 pouce.
+
+**Les URL `raw.githubusercontent.com`** documentées plus bas restent valables
+depuis le renommage de la branche en `main` (08/09/2026), mais elles ne sont pas
+la voie normale : PptxGenJS n'y vérifie pas le code HTTP et embarque le corps
+d'une erreur comme image, ce qui donne un rectangle blanc sans le moindre
+message. Le disque local d'abord.
+
+
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot -->
