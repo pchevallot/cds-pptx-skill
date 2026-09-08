@@ -1,5 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot
+# SPDX-License-Identifier: EUPL-1.2
 """
-CdS Charts — Fonctions matplotlib autonomes pour dataviz CdS.
+CdS Charts : fonctions matplotlib autonomes pour dataviz CdS.
 
 Chaque fonction genere un fichier PNG aux couleurs CdS et retourne
 le chemin du fichier genere (Path). Ces PNG peuvent etre inseres
@@ -77,7 +79,7 @@ def generate_radar(
     output_path: str | Path | None = None,
 ) -> Path:
     """
-    Generate a radar (spider) chart — ideal for SOCLE maturity dimensions.
+    Generate a radar (spider) chart, ideal for SOCLE maturity dimensions.
 
     Uses square figure, equal aspect, CdS palette.
 
@@ -145,7 +147,7 @@ def generate_heatmap(
     cmap: str | None = None,
 ) -> Path:
     """
-    Generate a heatmap — ideal for maturity grids (directions x dimensions).
+    Generate a heatmap, ideal for maturity grids (directions x dimensions).
 
     Args:
         data: 2D array of values (rows x cols)

@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2026 Comptoir des Signaux, SAS
+# SPDX-License-Identifier: LicenseRef-CdS-Marque-Reservee
+#
+# ATTENTION : ce fichier n'est PAS du code et n'est PAS sous EUPL-1.2.
+# Il contient les logos de Comptoir des Signaux encodés en base64.
+# Tous droits réservés. Voir assets/LICENCE-MARQUE.md.
 """
 Logos CdS embarques en base64 (redimensionnes a 400px de large).
 Utilises comme fallback quand le telechargement GitHub n est pas possible

@@ -1,0 +1,37 @@
+LicenseRef-CdS-Marque-Reservee
+Identité visuelle et marque de Comptoir des Signaux, tous droits réservés
+
+Copyright (c) 2026 Comptoir des Signaux, SAS
+
+Les fichiers portant cet identifiant ne sont couverts par aucune licence libre.
+Ils comprennent les logos, monogrammes et bandeaux de Comptoir des Signaux,
+sous forme d'image ou encodés en base64, ainsi que la dénomination
+« COMPTOIR DES SIGNAUX » et ses abréviations.
+
+Deux fondements distincts :
+
+  - la dénomination « COMPTOIR DES SIGNAUX » est une marque verbale française
+    enregistrée le 21/06/2024 sous le numéro 5036143, classes 38, 41 et 42, au
+    nom de COMPTOIR DES SIGNAUX, SAS (Siren 343237459), échéance 06/03/2034.
+    L'enregistrement produit ses effets en France ;
+  - les logos, monogrammes et bandeaux sont protégés au titre du droit
+    d'auteur, en tant qu'œuvres graphiques, sans formalité.
+
+Leur reproduction, leur adaptation, leur intégration dans un document, un
+support ou un logiciel, et tout usage à titre de marque sont soumis à
+autorisation écrite préalable de Comptoir des Signaux.
+
+La licence EUPL-1.2 appliquée au code de ce dépôt ne confère aucun droit sur
+ces éléments : son article 5, clause « Legal Protection », l'exclut
+expressément.
+
+Restent permis sans autorisation :
+  - lire, cloner et forker le dépôt sur GitHub, dans les conditions des
+    conditions générales de GitHub ;
+  - réutiliser le code et la méthode en y substituant une autre identité
+    visuelle ;
+  - citer le nom « Comptoir des Signaux » pour désigner l'origine de l'œuvre ;
+  - produire des documents à cette charte dans le cadre d'une mission pour
+    Comptoir des Signaux.
+
+Demande d'autorisation : pchevallot@comptoirdessignaux.com

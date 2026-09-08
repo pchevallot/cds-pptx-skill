@@ -281,3 +281,13 @@ npm install -g react-icons react react-dom sharp
 - [ ] **Metadonnees humaines** (Auteur/Titre/Objet/Mots cles/Categorie/Gestionnaire/Entreprise renseignes, aucune trace `python-pptx`/`PptxGenJS` dans `core.xml`/`app.xml`, Application reelle, dates plausibles) : helper bundle `references/set_ooxml_metadata.py` -> `apply_metadata(path, meta)`, a appeler juste apres la sauvegarde du .pptx. Regle detaillee dans le skill `cds-docx`.
 
 Lire [references/brand-guide.md](references/brand-guide.md) pour les specifications detaillees.
+
+---
+
+<!-- SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot -->
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+
+Contenu sous [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr).
+Les extraits de code sont sous [EUPL 1.2](./LICENSE).
+Les logos et l'identité visuelle de Comptoir des Signaux sont réservés :
+voir [`LICENSES.fr.md`](./LICENSES.fr.md).

@@ -108,4 +108,28 @@ Chaque presentation passe par un cycle obligatoire :
 
 ## Licence
 
-Usage interne : Comptoir des Signaux. Les logos et la charte graphique sont la propriété du Comptoir des Signaux.
+Ce dépôt est publié sous **licences multiples**, parce qu'il mélange trois natures
+de contenu. Le détail figure dans [`LICENSES.fr.md`](./LICENSES.fr.md).
+
+| Nature | Licence | Périmètre |
+|---|---|---|
+| **Code logiciel** | [EUPL 1.2](./LICENSE) | `scripts/cds_charts.py`, `references/set_ooxml_metadata.py`, extraits de code des guides |
+| **Contenus et méthode** | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | `SKILL.md`, `pptxgenjs-cds.md`, `dataviz.md`, `references/brand-guide.md`, `README.md` |
+| **Identité visuelle et marque** | **Tous droits réservés** | `assets/`, `scripts/logos_b64.py`, la dénomination « COMPTOIR DES SIGNAUX » |
+
+> **Réserve de marque.** « COMPTOIR DES SIGNAUX » est une marque verbale française
+> enregistrée le 21/06/2024 sous le numéro **5036143**, classes 38, 41 et 42, au nom de
+> COMPTOIR DES SIGNAUX, SAS. Les logos, monogrammes et bandeaux, y compris leur version
+> base64 dans `scripts/logos_b64.py`, sont protégés au titre du droit d'auteur. Vous
+> pouvez réutiliser le code et la méthode **en y substituant votre propre identité
+> visuelle**. Voir [`assets/LICENCE-MARQUE.md`](./assets/LICENCE-MARQUE.md).
+
+GitHub affiche un libellé de licence unique, déduit du fichier `LICENSE` : il annoncera
+« EUPL-1.2 » pour tout le dépôt. Cette détection ne sait pas lire les régimes multiples,
+c'est le tableau ci-dessus qui fait foi.
+
+Ce choix est celui déjà retenu pour [`comptoir-des-harnais`](https://github.com/pchevallot/comptoir-des-harnais),
+étendu d'un troisième régime que ce dépôt impose : il est fait de marque.
+
+Les dépendances (PptxGenJS, matplotlib, NumPy, Pillow) restent régies par leurs propres
+licences. Aucun fichier de police n'est distribué : **Open Sans** est seulement prescrite.

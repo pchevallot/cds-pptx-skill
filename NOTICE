@@ -1,0 +1,35 @@
+cds-pptx-skill
+Copyright (c) 2026 Comptoir des Signaux, SAS / Pascal Chevallot
+
+Ce dépôt est publié sous licences multiples. Voir LICENSES.fr.md pour le détail.
+
+  Code logiciel .................. EUPL-1.2                (voir LICENSE)
+  Contenus documentaires ......... CC BY-SA 4.0
+  Identité visuelle et marque .... Tous droits réservés     (voir assets/LICENCE-MARQUE.md)
+
+RÉSERVE DE MARQUE
+
+  « COMPTOIR DES SIGNAUX » est une marque verbale française enregistrée le
+  21/06/2024 sous le numéro 5036143, classes 38, 41 et 42, au nom de
+  COMPTOIR DES SIGNAUX, SAS (Siren 343237459), 315 passage du Frêne,
+  74570 Groisy. Échéance : 06/03/2034.
+
+  Les logos, monogrammes et bandeaux, y compris leur version encodée en base64
+  dans scripts/logos_b64.py, sont protégés au titre du droit d'auteur en tant
+  qu'œuvres graphiques. Ni la dénomination ni ces éléments ne font l'objet
+  d'une licence libre : leur usage est soumis à autorisation écrite préalable.
+
+  La marque produit ses effets en France. Ailleurs, la réserve repose sur le
+  droit d'auteur et sur la concurrence déloyale.
+
+  Conformément à l'article 5 de l'EUPL-1.2, clause « Legal Protection », la
+  licence appliquée au code ne confère aucun droit sur ces signes distinctifs,
+  hors la citation de l'origine de l'œuvre.
+
+CONSERVATION DES MENTIONS
+
+  L'article 5 de l'EUPL-1.2 impose de conserver intactes les mentions de droit
+  d'auteur, de brevet et de marque, et de joindre une copie de la licence à
+  toute redistribution. Ce fichier NOTICE fait partie de ces mentions.
+
+Contact : pchevallot@comptoirdessignaux.com

@@ -1034,3 +1034,13 @@ pres.writeFile({ fileName: "presentation_cds.pptx" })
 5. **Ombres** : `opacity` en nombre (0-1), jamais encodee dans la couleur hex
 6. **Offset d'ombre** : toujours positif (valeurs negatives corrompent le fichier)
 7. **ROUNDED_RECTANGLE** : ne pas combiner avec des overlays rectangulaires (coins non couverts)
+
+---
+
+<!-- SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot -->
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+
+Contenu sous [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr).
+Les extraits de code sont sous [EUPL 1.2](./LICENSE).
+Les logos et l'identité visuelle de Comptoir des Signaux sont réservés :
+voir [`LICENSES.fr.md`](./LICENSES.fr.md).

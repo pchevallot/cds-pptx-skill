@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot
+# SPDX-License-Identifier: EUPL-1.2
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Réécrit les métadonnées d'un fichier OOXML (.docx, .pptx, .xlsx) avec des

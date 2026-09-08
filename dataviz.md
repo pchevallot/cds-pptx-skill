@@ -192,3 +192,13 @@ et respecter les regles :
 - DPI 150, `bbox_inches="tight"`
 - Radars : `figsize=(8, 8)`, `set_aspect("equal")`
 - Pas de grille lourde (couleur `#CCCCCC`, linewidth 0.5)
+
+---
+
+<!-- SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot -->
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+
+Contenu sous [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr).
+Les extraits de code sont sous [EUPL 1.2](./LICENSE).
+Les logos et l'identité visuelle de Comptoir des Signaux sont réservés :
+voir [`LICENSES.fr.md`](./LICENSES.fr.md).

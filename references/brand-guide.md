@@ -2,7 +2,7 @@
 
 ## Identite visuelle
 
-Le Comptoir des Signaux (CdS) est un cabinet de conseil specialise dans la transformation numerique des collectivites territoriales, avec une expertise forte en intelligence artificielle.
+Comptoir des Signaux (CdS) est un cabinet de conseil specialise dans la transformation numerique des collectivites territoriales, avec une expertise forte en intelligence artificielle.
 
 Le ton est **professionnel, institutionnel et accessible**. Les presentations doivent inspirer confiance et serieux tout en restant claires pour des elus et cadres territoriaux.
 
@@ -274,3 +274,13 @@ Pour plus de lisibilite, placer les icones dans des cercles colores :
 10. **Pas de texte centre pour les paragraphes** : centre uniquement pour les titres
 
 > **Note** : les slides avec uniquement du texte (listes a puces, listes numerotees, paragraphes) sont tout a fait acceptables. Elles doivent toujours comporter la barre de titre bleue et le logo CdS en haut a droite.
+
+---
+
+<!-- SPDX-FileCopyrightText: 2026 Comptoir des Signaux / Pascal Chevallot -->
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+
+Contenu sous [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr).
+Les extraits de code sont sous [EUPL 1.2](../LICENSE).
+Les logos et l'identité visuelle de Comptoir des Signaux sont réservés :
+voir [`LICENSES.fr.md`](../LICENSES.fr.md).
