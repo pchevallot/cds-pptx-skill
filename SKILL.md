@@ -63,7 +63,23 @@ Hex **SANS** `#` : obligation PptxGenJS.
 
 ---
 
-## Logos : URLs de telechargement
+## Logos : ou les prendre
+
+**Ordre de resolution, dans cet ordre et pas un autre :**
+
+1. le module `charte.js` / `charte.py` du repertoire generique de l'atelier,
+   qui rend des chemins absolus deja verifies (voir « Source unique des assets
+   de charte » plus bas, et le CLAUDE.md de l'atelier pour la ligne exacte) ;
+2. a defaut, le dossier `assets/` de cette skill, en chemin absolu ;
+3. en bac a sable sans acces disque, les logos base64 de `scripts/logos_b64.py` ;
+4. en dernier recours seulement, les URL ci-dessous.
+
+**Les URL ne verifient rien.** PptxGenJS n'inspecte pas le code HTTP : sur une
+erreur, il embarque le corps de la reponse comme image et produit un rectangle
+blanc, sans message. Le tableau ci-dessous sert de reference de nommage, pas de
+methode de chargement par defaut.
+
+## Logos : URLs de telechargement (dernier recours)
 
 ### Logos complets (ratio ~4:1)
 

@@ -36,30 +36,75 @@ const makeShadowUp = () => ({
   type: "outer", color: "000000", blur: 4, offset: 2, angle: 270, opacity: 0.10,
 });
 
-// ─── URLs des assets GitHub ───
-const GITHUB = "https://raw.githubusercontent.com/pchevallot/cds-pptx-skill/main/assets";
-const LOGOS = {
-  jaune_blanc: `${GITHUB}/logos/CDS-Logo-Jaune-Blanc.png`,
-  bleu_jaune:  `${GITHUB}/logos/CDS-Logo-Bleu-Jaune.png`,
-  bleu_blanc:  `${GITHUB}/logos/CDS-Logo-Bleu-Blanc.png`,
-  noir:        `${GITHUB}/logos/CDS-Logo-Noir.png`,
-  blanc:       `${GITHUB}/logos/CDS-Logo-Blanc.png`,
-};
-const MONOGRAMMES = {
-  bleu_jaune:  `${GITHUB}/monogrammes/Monogramme-Bleu-Jaune.png`,
-  blanc_jaune: `${GITHUB}/monogrammes/Monogramme-Blanc-Jaune.png`,
-  blanc:       `${GITHUB}/monogrammes/Monogramme-Blanc.png`,
-  noir:        `${GITHUB}/monogrammes/Monogramme-Noir.png`,
-};
-const BANDEAUX = {
-  jaune_h: `${GITHUB}/bandeaux/Bandeau-motifs-jaune-horizontal.png`,
-  bleu_h:  `${GITHUB}/bandeaux/Bandeau-motifs-bleu-horizontal.png`,
-  blanc_h: `${GITHUB}/bandeaux/Bandeau-motifs-blanc-horizontal.png`,
-  jaune_v: `${GITHUB}/bandeaux/Bandeau-motifs-jaune-vertical.png`,
-  bleu_v:  `${GITHUB}/bandeaux/Bandeau-motifs-bleu-vertical.png`,
-  blanc_v: `${GITHUB}/bandeaux/Bandeau-motifs-blanc-vertical.png`,
-};
+// --- Assets de charte : resolution, jamais reconstruction --------------------
+// On remonte jusqu'au repertoire generique de charte de l'atelier, qui expose
+// des chemins absolus deja verifies. A defaut, on retombe sur le dossier
+// assets/ de la skill. Les URL GitHub ne sont pas utilisees ici : PptxGenJS
+// n'inspecte pas le code HTTP et embarquerait le corps d'une erreur comme
+// image, ce qui donne un rectangle blanc sans le moindre message.
+const path = require("path");
+const fs = require("fs");
 
+function chargerCharte() {
+  let d = __dirname;
+  while (d !== path.dirname(d)) {
+    const m = path.join(d, "cds-visuels/charte.js");
+    if (fs.existsSync(m)) return require(m);
+    d = path.dirname(d);
+  }
+  const skill = path.join(process.env.HOME, ".claude/skills/cds-pptx/assets");
+  if (!fs.existsSync(skill)) {
+    throw new Error(
+      "Assets de charte introuvables. Attendus dans le repertoire generique de " +
+      "l'atelier (cds-visuels/charte.js) ou dans " + skill + "."
+    );
+  }
+  const p = (rel) => path.join(skill, rel);
+  const dims = {
+    "logos/CDS-Logo-Blanc.png": [2771, 694],
+    "logos/CDS-Logo-Bleu-Blanc.png": [2770, 694],
+    "logos/CDS-Logo-Bleu-Jaune.png": [2770, 693],
+    "logos/CDS-Logo-Jaune-Blanc.png": [2770, 694],
+    "logos/CDS-Logo-Noir.png": [2771, 693],
+    "monogrammes/Monogramme-Blanc.png": [2450, 1782],
+    "monogrammes/Monogramme-Blanc-Jaune.png": [2450, 1782],
+    "monogrammes/Monogramme-Bleu-Jaune.png": [2450, 1783],
+    "monogrammes/Monogramme-Noir.png": [2450, 1783],
+    "bandeaux/Bandeau-motifs-blanc-horizontal.png": [1453, 186],
+    "bandeaux/Bandeau-motifs-bleu-horizontal.png": [1453, 186],
+    "bandeaux/Bandeau-motifs-jaune-horizontal.png": [1453, 186],
+    "bandeaux/Bandeau-motifs-blanc-vertical.png": [223, 1879],
+    "bandeaux/Bandeau-motifs-bleu-vertical.png": [223, 1879],
+    "bandeaux/Bandeau-motifs-jaune-vertical.png": [223, 1879],
+  };
+  const ratio = (abs) => {
+    const rel = path.relative(skill, abs).split(path.sep).join("/");
+    if (!dims[rel]) throw new Error("Dimensions inconnues pour " + abs);
+    return dims[rel][0] / dims[rel][1];
+  };
+  return {
+    LOGOS: { blanc: p("logos/CDS-Logo-Blanc.png"),
+             bleu_blanc: p("logos/CDS-Logo-Bleu-Blanc.png"),
+             bleu_jaune: p("logos/CDS-Logo-Bleu-Jaune.png"),
+             jaune_blanc: p("logos/CDS-Logo-Jaune-Blanc.png"),
+             noir: p("logos/CDS-Logo-Noir.png") },
+    MONOGRAMMES: { blanc: p("monogrammes/Monogramme-Blanc.png"),
+                   blanc_jaune: p("monogrammes/Monogramme-Blanc-Jaune.png"),
+                   bleu_jaune: p("monogrammes/Monogramme-Bleu-Jaune.png"),
+                   noir: p("monogrammes/Monogramme-Noir.png") },
+    BANDEAUX: { blanc_h: p("bandeaux/Bandeau-motifs-blanc-horizontal.png"),
+                bleu_h: p("bandeaux/Bandeau-motifs-bleu-horizontal.png"),
+                jaune_h: p("bandeaux/Bandeau-motifs-jaune-horizontal.png"),
+                blanc_v: p("bandeaux/Bandeau-motifs-blanc-vertical.png"),
+                bleu_v: p("bandeaux/Bandeau-motifs-bleu-vertical.png"),
+                jaune_v: p("bandeaux/Bandeau-motifs-jaune-vertical.png") },
+    ratio,
+    hauteurPour: (abs, largeur) => largeur / ratio(abs),
+    largeurPour: (abs, hauteur) => hauteur * ratio(abs),
+  };
+}
+
+const { LOGOS, MONOGRAMMES, BANDEAUX, hauteurPour, largeurPour } = chargerCharte();
 // ─── Dimensions utiles ───
 const W = 13.33;  // Largeur slide
 const H = 7.5;    // Hauteur slide
