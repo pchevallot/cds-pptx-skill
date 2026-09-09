@@ -116,7 +116,12 @@ function adaptiveFontSize(text) {
 function addBandeau(slide, variant = "jaune_h") {
   slide.addImage({
     path: BANDEAUX[variant],
-    x: 0, y: H - 1.15, w: W, h: 1.15,
+    // Hauteur calculée, jamais posée à la main : le bandeau a un ratio natif
+    // de 7,81:1. Sur 13,33 pouces de large, cela fait 1,71 pouce, et rien
+    // d'autre. Le gabarit 13,33 x 1,15 qui figurait ici comprimait le motif
+    // de 33 % sans que rien ne le signale (corrigé le 09/09/2026).
+    x: 0, y: H - hauteurPour(BANDEAUX[variant], W), w: W,
+    h: hauteurPour(BANDEAUX[variant], W),
   });
 }
 
