@@ -292,18 +292,23 @@ Lire [references/brand-guide.md](references/brand-guide.md) pour les specificati
 | Skill installée (source licenciée, miroir amont) | `assets/` de la skill |
 | Sandbox sans accès disque | `scripts/logos_b64.py`, base64 embarqué |
 
-Un générateur pointe le répertoire générique par une constante en tête de
-fichier, il n'embarque pas sa copie. Poser le chemin absolu de l'atelier dans
-`CHARTE`, une seule fois :
+**Un générateur ne construit jamais un chemin d'asset.** Il charge le module
+`charte.js` (ou `charte.py`) du répertoire générique, qui expose les chemins
+déjà résolus, lève une erreur au chargement si un fichier manque, et donne les
+dimensions natives. Le CLAUDE.md de l'atelier porte la ligne d'appel exacte.
 
 ```javascript
-const CHARTE = process.env.CDS_CHARTE || "<racine de l'atelier>/cds-visuels/charte";
-const LOGOS = {
-  bleu_jaune:  `${CHARTE}/logos/CDS-Logo-Bleu-Jaune.png`,   // fond clair
-  jaune_blanc: `${CHARTE}/logos/CDS-Logo-Jaune-Blanc.png`,  // fond bleu ou sombre
-};
-const BANDEAUX = { jaune_h: `${CHARTE}/bandeaux/Bandeau-motifs-jaune-horizontal.png` };
+const { LOGOS, MONOGRAMMES, BANDEAUX, hauteurPour } = require(/* charte.js de l'atelier */);
+
+slide.addImage({ path: LOGOS.jaune_blanc, x: 0.5, y: 0.4, w: 2.2,          // fond bleu
+                 h: hauteurPour(LOGOS.jaune_blanc, 2.2) });                // jamais étiré
+slide.addImage({ path: BANDEAUX.jaune_h, x: 0, y: 6.2, w: 13.33,
+                 h: hauteurPour(BANDEAUX.jaune_h, 13.33) });               // 1,71 pouce
 ```
+
+Clés exposées, ce sont les seules : `LOGOS.blanc|bleu_blanc|bleu_jaune|jaune_blanc|noir`,
+`MONOGRAMMES.blanc|blanc_jaune|bleu_jaune|noir`,
+`BANDEAUX.blanc_h|blanc_v|bleu_h|bleu_v|jaune_h|jaune_v`.
 
 **Pourquoi cette règle.** Un dossier `assets/` par formation, c'est une charte
 qui existe en autant d'exemplaires que de projets, sans inventaire : le jour où
@@ -324,9 +329,10 @@ Il classe chaque PNG de l'atelier en CONFORME, BASSE DEFINITION connue (les
 variantes 400 px des anciens générateurs, ratio correct, laissées telles quelles
 dans les projets livrés) ou INCONNU, et sort en erreur sur le premier inconnu.
 
-**Ratios natifs**, à ne jamais étirer : logo 2770 x 694, soit 3,99:1 ; bandeau
-de motifs 1453 x 186, soit 7,81:1. Sur une slide de 13,33 pouces, la hauteur
-juste d'un bandeau pleine largeur est `W / 7.81`, soit 1,71 pouce.
+**Ratios natifs**, à ne jamais étirer : logo 3,99:1 (2770 x 694), monogramme
+1,37:1 (2450 x 1782), bandeau de motifs 7,81:1 (1453 x 186). `hauteurPour()`
+les applique, ce qui évite de les retaper : sur une slide de 13,33 pouces, un
+bandeau pleine largeur fait 1,71 pouce de haut, et rien d'autre.
 
 **Les URL `raw.githubusercontent.com`** documentées plus bas restent valables
 depuis le renommage de la branche en `main` (08/09/2026), mais elles ne sont pas
