@@ -280,6 +280,13 @@ npm install -g react-icons react react-dom sharp
 
 ## Checklist avant livraison
 
+> **Contrôle outillé.** Dans l'atelier de production, `verifier-livrable.py`
+> rejoue automatiquement la plupart des points ci-dessous sur le fichier final :
+> images sous 1 ko, Override mortes, métadonnées, ratio des assets de charte,
+> nommage, typographie, nombre de slides. La checklist reste la référence, le
+> script en est le garde-fou.
+
+
 - [ ] Police Open Sans utilisee partout (pas d'Arial, pas de Calibri)
 - [ ] Couleurs exclusivement issues de la palette CdS (hex SANS `#`)
 - [ ] Logo Jaune-Blanc sur barre titre bleue et slides de couverture
