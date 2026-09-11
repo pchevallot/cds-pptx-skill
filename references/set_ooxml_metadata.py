@@ -82,6 +82,23 @@ def _insert_app_tag(xml, tag, value):
     return xml.replace("</Properties>", frag + "</Properties>")
 
 
+def _normaliser_properties(xml):
+    """Déplie un <Properties .../> auto-fermant en <Properties ...></Properties>.
+
+    docx-js écrit un app.xml réduit à un élément vide auto-fermant. Sans
+    </Properties>, aucune insertion n'avait de point d'ancrage : le helper
+    repartait sans rien écrire, et le livrable sortait sans Application, sans
+    gestionnaire ni société, en silence (constaté le 11/09/2026 sur quatre
+    documents produits par docx-js)."""
+    return re.sub(r"(<Properties\b[^>]*?)\s*/>", r"\1></Properties>", xml, count=1)
+
+
+def _properties_vide(xml):
+    """Vrai si le corps de <Properties> ne contient aucun élément."""
+    m = re.search(r"<Properties\b[^>]*>(.*?)</Properties>", xml, re.S)
+    return m is not None and not re.search(r"<\w", m.group(1))
+
+
 def _patch_app(xml, application, manager, company):
     """Met à jour Application, Manager, Company dans app.xml.
 
@@ -90,6 +107,16 @@ def _patch_app(xml, application, manager, company):
     un fichier produit par une version antérieure de ce helper peut les porter
     après AppVersion, ce qui déclenche un message d'erreur à l'ouverture.
     """
+    xml = _normaliser_properties(xml)
+    if _properties_vide(xml):
+        # Properties vide : on écrit la séquence dans l'ordre du schéma, où
+        # Manager et Company précèdent Application, et AppVersion ferme.
+        bloc = (f"<Manager>{escape(manager)}</Manager>"
+                f"<Company>{escape(company)}</Company>"
+                f"<Application>{escape(application)}</Application>"
+                f"<AppVersion>16.0000</AppVersion>")
+        return xml.replace("</Properties>", bloc + "</Properties>", 1)
+
     v = escape(application)
     new, n = re.subn(r"<Application/>", f"<Application>{v}</Application>", xml)
     if n == 0:
