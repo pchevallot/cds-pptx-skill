@@ -211,6 +211,7 @@ Chercher :
 - Colonnes ou elements similaires non alignes
 - Texte a faible contraste
 - Accents manquants dans le texte francais
+- Titres coupés par le retour automatique : mot seul en dernière ligne, article séparé de son nom, coupure hors du bloc de sens
 - Logo absent ou mal positionne
 
 Pour chaque slide, lister les problemes trouves, meme mineurs.
@@ -255,6 +256,23 @@ Signaler TOUS les problemes trouves.
 13. **Jamais de radar en format rectangulaire** : `figsize=(8, 8)` + `set_aspect("equal")`
 14. **Jamais oublier `bbox_inches="tight"`** dans les savefig matplotlib
 
+### Titres et textes projetés
+15. **Jamais laisser le retour automatique couper un titre.** Un titre (couverture,
+    barre de titre, intercalaire, citation, carte en 20 pt et plus) qui tient sur
+    plus d'une ligne se coupe **à la main, au bloc de sens** : après la virgule ou le
+    deux-points, entre le constat et sa conséquence, entre le verbe et son complément.
+    Chaque ligne doit se lire d'un trait. Jamais un mot seul en dernière ligne
+    (« … pas encore / posée », « … qui les lui / donne ? »), jamais un article séparé
+    de son nom (« Classer la / donnée »), jamais un mot coupé (« savoir- / faire »).
+    En PptxGenJS : `"Le train accélère,\nla voie n'est pas encore posée"`, ou des runs
+    `{ text, options: { breakLine: true } }`. Si la ligne ne tient pas, réduire la
+    taille de 2 pt ou reformuler, pas laisser la machine choisir.
+16. **Jamais de citation anglaise à l'écran.** L'écran porte la traduction française,
+    sans guillemets (ce n'est pas une citation mot à mot) ; l'original vérifié va en
+    bas de slide, entre guillemets avec sa source et sa date
+    (« Citations originales : « … » (Source, JJ/MM/AAAA) »). Les notes du présentateur
+    peuvent garder l'original.
+
 ---
 
 ## Dependances
@@ -282,9 +300,11 @@ npm install -g react-icons react react-dom sharp
 
 > **Contrôle outillé.** Dans l'atelier de production, `verifier-livrable.py`
 > rejoue automatiquement la plupart des points ci-dessous sur le fichier final :
-> images sous 1 ko, Override mortes, métadonnées, ratio des assets de charte,
-> nommage, typographie, nombre de slides. La checklist reste la référence, le
-> script en est le garde-fou.
+> images sous 1 ko, Override mortes, caractères de contrôle interdits en XML,
+> métadonnées, ratio des assets de charte, nommage, typographie, mot orphelin en
+> fin de titre (césure refaite avec la largeur réelle d'Open Sans), nombre de
+> slides. La checklist reste la référence, le script en est le garde-fou : il
+> repère un titre mal coupé, mais seul un humain choisit le bon point de coupure.
 
 
 - [ ] Police Open Sans utilisee partout (pas d'Arial, pas de Calibri)
@@ -300,6 +320,8 @@ npm install -g react-icons react react-dom sharp
 - [ ] Accents francais presents partout
 - [ ] Pipeline QA execute (au moins un cycle fix+verify)
 - [ ] Pas de ligne d'accent sous les titres
+- [ ] Titres sur deux lignes coupés à la main, au bloc de sens ; aucun mot orphelin ni mot coupé (relire chaque titre multi-ligne sur le rendu)
+- [ ] Aucune citation anglaise à l'écran : traduction projetée, original en bas de slide avec sa source
 - [ ] factory `makeShadow()` utilisee (jamais de reutilisation d'objet)
 - [ ] **Metadonnees humaines** (Auteur/Titre/Objet/Mots cles/Categorie/Gestionnaire/Entreprise renseignes, aucune trace `python-pptx`/`PptxGenJS` dans `core.xml`/`app.xml`, Application reelle, dates plausibles) : helper bundle `references/set_ooxml_metadata.py` -> `apply_metadata(path, meta)`, a appeler juste apres la sauvegarde du .pptx. Regle detaillee dans le skill `cds-docx`.
 
