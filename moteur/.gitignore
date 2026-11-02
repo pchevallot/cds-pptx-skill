@@ -1,0 +1,5 @@
+node_modules/
+.venv/
+exemple.pptx
+*.empreinte
+*.plan.txt

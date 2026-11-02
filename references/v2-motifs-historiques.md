@@ -1,3 +1,5 @@
+Référence v2, à lire seulement pour maintenir un générateur antérieur à la v3.
+
 # PptxGenJS : Patterns CdS
 
 Guide complet pour creer des presentations brandees Comptoir des Signaux avec PptxGenJS.
