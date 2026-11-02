@@ -1,67 +1,39 @@
-# CdS PPTX Skill v2 : double moteur PowerPoint, Comptoir des Signaux
+# CdS PPTX Skill v3 : moteur déterministe, Comptoir des Signaux
 
-Skill pour Claude Code (et autres outils IA) permettant de generer des presentations PowerPoint respectant la charte graphique du **Comptoir des Signaux**.
+Skill pour Claude Code (et autres outils IA) qui produit des présentations PowerPoint à la charte graphique de **Comptoir des Signaux**.
 
-**v2** : double moteur **PptxGenJS** (slides creatives) + **matplotlib** (dataviz complexes).
+**v3** : on écrit une source Markdown, un moteur Node (sans IA) la convertit en PPTX. La mise en forme n'est plus générée par le modèle : le résultat est reproductible, les alertes sont signalées par numéro de ligne, et la consommation de tokens tombe à la seule rédaction du contenu. Les seize motifs de la v2 sont conservés (cartes, chiffres clés, schémas, graphiques natifs, radar, carte de chaleur, icônes, citation, prompt, décodage, image, diapositive libre).
+
+## Utilisation
+
+```bash
+cd moteur && npm install          # une seule fois (Node 20 ou plus)
+node moteur/cds-deck.js source.md --sortie deck.pptx
+```
+
+Le format de la source est décrit dans `grammaire.md` (une section par directive) ; `moteur/exemple.md` est un exemple complet de 29 diapositives. Le radar et la carte de chaleur demandent Python avec matplotlib (variable `CDS_PYTHON`).
 
 ## Contenu du repository
 
 ```
 cds-pptx-skill/
-├── SKILL.md                     # Point d'entree du skill (routing, palette, QA)
-├── pptxgenjs-cds.md             # Guide PptxGenJS : 15 patterns de slides
-├── dataviz.md                   # Guide matplotlib : radar, heatmap, bar, line
+├── SKILL.md                     # Point d'entrée (routage, usage du moteur)
+├── grammaire.md                 # Grammaire de la source Markdown
+├── moteur/                      # Moteur Node (cds-deck.js), essais, exemple
+├── dataviz.md                   # Guide matplotlib : radar, carte de chaleur
 ├── references/
-│   └── brand-guide.md           # Guide de marque complet
-├── scripts/
-│   ├── cds_charts.py            # Fonctions matplotlib autonomes (PNG)
-│   └── logos_b64.py             # Logos embarques en base64 (fallback reseau)
-└── assets/
-    ├── logos/                   # 5 variantes du logo CdS
-    ├── monogrammes/             # 4 variantes du monogramme
-    └── bandeaux/                # 6 bandeaux de motifs decoratifs
+│   ├── brand-guide.md           # Guide de marque complet
+│   └── v2-motifs-historiques.md # Guide PptxGenJS de la v2, pour maintenance seulement
+├── scripts/                     # cds_charts.py, logos_b64.py
+└── assets/                      # logos, monogrammes, bandeaux
 ```
 
-## Architecture double moteur
-
-| Moteur | Usage | Fichier |
-|--------|-------|---------|
-| **PptxGenJS** | Slides creatives : cover, section, cards, blocks, stats, timeline, table, chart natif, quote, icon grid, image+text, closing | `pptxgenjs-cds.md` |
-| **matplotlib** | Dataviz complexes : radar SOCLE, heatmap de maturite, scatter, bubble | `dataviz.md` + `scripts/cds_charts.py` |
-
-Le workflow pour les dataviz : generer le PNG en Python via `cds_charts.py`, puis l'inserer dans PptxGenJS via `addImage()`.
-
-## Installation
-
-### Pour Claude Code (CLI)
+## Installation (Claude Code)
 
 ```bash
 git clone https://github.com/pchevallot/cds-pptx-skill.git
-# Windows
-xcopy /E /I cds-pptx-skill %USERPROFILE%\.claude\skills\cds-pptx
-# macOS / Linux
 cp -r cds-pptx-skill ~/.claude/skills/cds-pptx
-```
-
-### Pour Claude Web / Claude Desktop (Projects)
-
-1. Creer un nouveau **Project** dans Claude
-2. Copier `SKILL.md` dans les **Custom Instructions**
-3. Ajouter `pptxgenjs-cds.md` et `dataviz.md` comme fichiers de reference
-4. Ajouter `references/brand-guide.md` en complement
-5. Joindre `scripts/cds_charts.py` et `scripts/logos_b64.py`
-
-### Dependances
-
-```bash
-# PptxGenJS (obligatoire)
-npm install -g pptxgenjs
-
-# matplotlib (pour les dataviz)
-pip install matplotlib numpy Pillow
-
-# Optionnel : icones pour le pattern Icon Grid
-npm install -g react-icons react react-dom sharp
+cd ~/.claude/skills/cds-pptx/moteur && npm install
 ```
 
 ## Charte graphique : Resume
@@ -80,32 +52,6 @@ npm install -g react-icons react react-dom sharp
 
 **Open Sans** partout (fallback : Calibri sur Windows, Carlito sur Linux).
 
-### 15 patterns de slides disponibles
-
-1. Cover : couverture fond bleu + bandeau
-2. Section divider : separateur fond bleu
-3. Content : texte simple
-4. Bullets : liste a puces
-5. Two-column : deux colonnes
-6. Cards : 2-4 cartes avec ombres
-7. Blocks : blocs empiles avec barres d'accent
-8. Stats callout : grands chiffres KPI
-9. Table : tableau brande
-10. Bar/Line/Pie chart : charts natifs PptxGenJS
-11. Timeline : frise chronologique
-12. Icon grid : grille d'icones
-13. Quote : citation sur fond bleu
-14. Image + text : image et texte cote a cote
-15. Closing : slide de cloture + bandeau
-
-### Pipeline QA integre
-
-Chaque presentation passe par un cycle obligatoire :
-1. Generation du .pptx
-2. Conversion en images (LibreOffice + pdftoppm)
-3. Inspection visuelle via subagent
-4. Boucle fix-and-verify jusqu'a zero defaut
-
 ## Licence
 
 Ce dépôt est publié sous **licences multiples**, parce qu'il mélange trois natures
@@ -113,8 +59,8 @@ de contenu. Le détail figure dans [`LICENSES.fr.md`](./LICENSES.fr.md).
 
 | Nature | Licence | Périmètre |
 |---|---|---|
-| **Code logiciel** | [EUPL 1.2](./LICENSE) | `scripts/cds_charts.py`, `references/set_ooxml_metadata.py`, extraits de code des guides |
-| **Contenus et méthode** | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | `SKILL.md`, `pptxgenjs-cds.md`, `dataviz.md`, `references/brand-guide.md`, `README.md` |
+| **Code logiciel** | [EUPL 1.2](./LICENSE) | `moteur/`, `scripts/cds_charts.py`, `references/set_ooxml_metadata.py`, extraits de code des guides |
+| **Contenus et méthode** | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | `SKILL.md`, `grammaire.md`, `dataviz.md`, `references/brand-guide.md`, `README.md` |
 | **Identité visuelle et marque** | **Tous droits réservés** | `assets/`, `scripts/logos_b64.py`, la dénomination « COMPTOIR DES SIGNAUX » |
 
 > **Réserve de marque.** « COMPTOIR DES SIGNAUX » est une marque verbale française
